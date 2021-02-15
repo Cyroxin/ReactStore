@@ -48,7 +48,7 @@ export const Carousel = (props) => {
         style={{
           fontSize: 50,
           paddingHorizontal: 10,
-          opacity: interval === i ? 0.5 : 0.1,
+          opacity: interval === i ? 0.5 : 0.2,
         }}
       >
         &bull;
