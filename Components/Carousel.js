@@ -21,7 +21,7 @@ export const Carousel = (props) => {
   };
 
   const getInterval = (offset) => {
-    /*
+    
     for (let i = 1; i <= intervals; i++) {
       if (offset + 1 < (width / intervals) * i) {
         return i;
@@ -29,8 +29,8 @@ export const Carousel = (props) => {
       if (i == intervals) {
         return i;
       }
-    }*/
-    return offset / (width / intervals) + 1;
+    }
+    //return offset / (width / intervals) + 1;
   };
 
   const getOffset = (interval) => {
@@ -75,7 +75,7 @@ export const Carousel = (props) => {
           // Remember the current slide
           setInterval(getInterval(data.nativeEvent.contentOffset.x));
         }}
-        scrollEventThrottle={0} // Do not show bullet opacity change done by animation
+        scrollEventThrottle={1} // Do not show bullet opacity change done by animation
         pagingEnabled
         decelerationRate='normal'
         disableIntervalMomentum={true} // Max slide change is (+/-)1
