@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -26,14 +26,17 @@ import {
   Body,
   Button,
   Right,
+  Fab,
+  Footer,
 } from 'native-base';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
 
-export default function App() {
-    const [width, setWidth] = React.useState(0);
-    const [height, setHeight] = React.useState(0);
+export default function App(props) {
+  const [width, setWidth] = useState(useWindowDimensions().width);
+  const height = useWindowDimensions().height;
+    console.log('screenwidth: '+width)
 
   const simg = {
     height: 300,
@@ -52,7 +55,7 @@ export default function App() {
 
   /* Announcement Banners / Manually Highlighted Posts */
   const carousel = (
-    <Carousel width='100%'>
+    <Carousel width='100%' onContentSizeChangeInterval={(w,h) => {console.log('setwidth:'+w);setWidth(w);}}>
       <Image
         source={{ uri: `https://dummyimage.com/800x400/daabdb/000000` }}
         style={simg}
@@ -76,7 +79,7 @@ export default function App() {
     </Carousel>
   );
 
-  const content = (
+  const list = (
     <List>
       <ListItem>
         <Card style={{ width: '100%' }}>
@@ -102,7 +105,7 @@ export default function App() {
               </Button>
             </Body>
             <Right>
-              <Text>Cyroxin</Text>
+              <Text>Jeff</Text>
             </Right>
           </CardItem>
         </Card>
@@ -168,31 +171,28 @@ export default function App() {
     </List>
   );
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-    },
-  });
+
+  const content = (
+    <Content contentContainerStyle={{ maxHeight: 1 }}>
+      {carousel}
+      {/* Sort */}
+      <SortSelector></SortSelector>
+      {/* List */}
+      {list}
+    </Content>
+  );
 
   return (
-    <>
-      {Platform.OS == 'web' && carousel}
-      <ScrollView
-        style={{ height: '100%' }}
-        onContentSizeChange={(w, h) => {setWidth(w); setHeight(h);}}
-      >
-        {Platform.OS != 'web' && carousel}
-        {/* Sort */}
-        <SortSelector></SortSelector>
-        {content}
-      </ScrollView>
-
-      {/* Navigation */}
-      <FloatingNavigator />
-    </>
+      <Container>
+          {content}
+        <FloatingNavigator
+          onPress={[
+            () => console.log('disabled by fabnav'),
+            () => console.log('profile'),
+            () => props.navigation.navigate('Upload'),
+            () => console.log('home'),
+          ]}
+        />
+      </Container>
   );
 }

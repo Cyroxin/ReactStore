@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import Home from './Pages/Home'
+import AppContainer from './Route';
 
-export default function App() {
+const App = () =>
+{
+    return (
+      <NavigationContainer>
+        <AppContainer />
+    </NavigationContainer>
+    );
+};
 
-  return (
-    /* TODO: This should be login */
-    <Home></Home>
-  );
-}
+export default App;

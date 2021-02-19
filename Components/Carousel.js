@@ -68,7 +68,7 @@ export const Carousel = (props) => {
           justifyContent: 'center'
         }}
         showsHorizontalScrollIndicator={false}
-        onContentSizeChange={(w, h) => init(w)}
+        onContentSizeChange={(w, h) => {init(w); props.onContentSizeChangeInterval(w/intervals/itemsPerInterval,h);}}
         onScroll={(data) => {
           // Set the width to match the slide, not needed if slide sizes do not change/differ.
           setWidth(data.nativeEvent.contentSize.width);
