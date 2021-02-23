@@ -1,34 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  useWindowDimensions,
-  FlatList,
-  Platform,
-} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Icon,
-  Picker,
-  Form,
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  Thumbnail,
-  Left,
-  Body,
-  Button,
-  Right,
-  Fab,
-  Footer,
-} from 'native-base';
+import {Image, useWindowDimensions} from 'react-native';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';

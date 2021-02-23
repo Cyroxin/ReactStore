@@ -30,66 +30,55 @@ import {
   Fab,
   Input,
   Item,
+  Title,
+  Textarea,
 } from 'native-base';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
 
-export default function App(props) {
-    // This is reused for each text component the user adds.
-    const [input, setInput] = useState();
 
-  const img = {
-    width: 800,
-    height: 400,
-    resizeMode: 'cover',
-    aspectRatio: 800 / 400,
-    margin: 10,
-    alignSelf: 'center',
-  };
+export default function App(props) {
+  const height = useWindowDimensions().height;
+  const width = useWindowDimensions().width;
+  
+  // This is reused for each text component the user adds.
+  const [input, setInput] = useState();
 
   const content = (
-    <Content padder contentContainerStyle={{ maxHeight: 1 }}>
-      <Item>
-        <Input
-          editable
+    <Content padder>
+      <Item underline={false} style={{ width: '100%', margin: 20, flexDirection: 'column' }}>
+        <Textarea
+          disabled
           multiline
-          style={{ height: 100, margin: 10 }}
-          placeholder={
-            'Something like this could be added once a textbox is requested. Obviously the checkmarks would be destroyed when writing has finished.'
-          }
+          underline={false}
+          onChangeText={(text) => setInput(text)}
+          value='Some already written text that cannot be changed.'
+          style={{ textAlignVertical: 'top', width: '100%' }}
         />
-        <Icon style={{ color: 'red', margin: 1 }} name='close-circle' />
-        <Icon style={{ color: 'green', margin: 1 }} name='checkmark-circle' />
       </Item>
       <Image
         source={{ uri: 'https://dummyimage.com/800x400/badbcb/000000' }}
         style={img}
       />
-      <Item>
+      <Item underline={false} style={{ width: '100%', margin: 10, flexDirection: 'column' }}>
         <Input
-          editable
           multiline
-          style={{ height: 100, margin: 10 }}
-          placeholder={
-            'Another long paragraph could be added here by the user. Below this there could be a video of some sort. Make these text boxes look better.'
-          }
+          style={{ textAlignVertical: 'top', width: '100%' }}
+          numberOfLines={10}
+          placeholder={'Freshly added textbox, press check when done.'}
         />
-        <Icon style={{ color: 'red', margin: 1 }} name='close-circle' />
-        <Icon style={{ color: 'green', margin: 1 }} name='checkmark-circle' />
+        <View style={{flexDirection: 'row'}}>
+          <Icon style={{ color: 'red', padding: 5, margin: 10 }} name='close-circle' />
+          <Icon style={{ color: 'green', padding: 5, margin: 10 }} name='checkmark-circle' />
+        </View>
       </Item>
-      <Image
-        source={{ uri: 'https://dummyimage.com/800x400/badbcb/000000' }}
-        style={img}
-      />
     </Content>
   );
 
   return (
-    <Container style={{ maxHeight: '100%' }}>
-      {/* Add text, image & video components here once navigator pressed */}
-      {/* Note: If Action button does not float properly, use height as is done in home. */}
-      {content}
+    <>
+      <ScrollView style={{ height: height }}>{content}</ScrollView>
       <FloatingNavigator
         upload
         onPress={[
@@ -99,6 +88,15 @@ export default function App(props) {
           () => console.log('text'),
         ]}
       />
-    </Container>
+    </>
   );
 }
+
+const img = {
+  width: 800,
+  height: 400,
+  resizeMode: 'center',
+  aspectRatio: 800 / 400,
+  margin: 10,
+  alignSelf: 'center',
+};
