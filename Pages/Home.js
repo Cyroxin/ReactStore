@@ -74,20 +74,21 @@ export default function App(props) {
     </Carousel>
   );
 
-  const content = (
-    <Content>
-      {carousel}
-      {/* Sort */}
-      <SortSelector></SortSelector>
-      {/* List */}
-      {/* TODO: Change getPosts() to getPosts(userID) */}
-      <PostsList style={{ height: 500, width: '100%' }} items={getPosts()} />
-    </Content>
-  );
+  // style={{ height: height }}
 
   return (
     <>
-      <ScrollView style={{ height: height }}>{content}</ScrollView>
+      <PostsList
+        ListHeaderComponent={
+          <>
+            {carousel}
+            {/* Sort List */}
+            <SortSelector></SortSelector>
+          </>
+        }
+        items={getPosts()}
+        style={{height: height}}
+      />
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),

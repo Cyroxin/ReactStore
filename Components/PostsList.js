@@ -26,6 +26,9 @@ export const PostsList = (props) => {
 
   return (
     <FlatList
+      ListHeaderComponent={props.ListHeaderComponent}
+      contentContainerStyle={props.contentContainerStyle}
+      style={props.style}
       data={props.items}
       keyExtractor={(_, index) => index.toString()}
       renderItem={({ item }) => (
