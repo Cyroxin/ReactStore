@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, ScrollView, Text, Platform } from 'react-native';
 
 export const Carousel = (props) => {
-  const items = props.children;
+  const children = props.children;
 
   const itemsPerInterval =
     props.itemsPerInterval === undefined ? 1 : props.itemsPerInterval;
@@ -81,7 +81,7 @@ export const Carousel = (props) => {
         disableIntervalMomentum={true} // Max slide change is (+/-)1
         snapToInterval={width / intervals}
       >
-        {items}
+        {children}
       </ScrollView>
       <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'} }>
         {bullets}

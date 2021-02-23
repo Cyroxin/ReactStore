@@ -88,6 +88,7 @@ export default function App(props) {
   return (
     <Container style={{ maxHeight: '100%' }}>
       {/* Add text, image & video components here once navigator pressed */}
+      {/* Note: If Action button does not float properly, use height as is done in home. */}
       {content}
       <FloatingNavigator
         upload
