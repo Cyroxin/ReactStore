@@ -21,27 +21,9 @@ export default function App(props) {
   /* Announcement Banners / Manually Highlighted Posts */
   const carousel = (
     <Carousel width='100%'
-     onContentSizeChangeInterval={w => setWidth(w)}>
-      <Image
-        source={{ uri: `https://dummyimage.com/800x400/daabdb/000000` }}
-        style={simg}
-      ></Image>
-      <Image
-        source={{ uri: `https://dummyimage.com/800x400/dbbbdb/000000` }}
-        style={simg}
-      ></Image>
-      <Image
-        source={{ uri: `https://dummyimage.com/800x400/dccbdb/000000` }}
-        style={simg}
-      ></Image>
-      <Image
-        source={{ uri: `https://dummyimage.com/800x400/dddbdb/000000` }}
-        style={simg}
-      ></Image>
-      <Image
-        source={{ uri: `https://dummyimage.com/800x400/deebdb/000000` }}
-        style={simg}
-      ></Image>
+     onContentSizeChangeInterval={w => setWidth(w)}
+     items={getPosts(undefined,'highlight')}>
+
     </Carousel>
   );
 

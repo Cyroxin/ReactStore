@@ -17,15 +17,19 @@ const doFetch = async (url, options = {}) => {
 };
 
 
-// Gets a list of media
-const getPosts = (userId = undefined) => {
+// Gets a list of media either by userId or custom tag. If no tag is given, all app posts are shown.
+const getPosts = (userId = undefined, tag = undefined) => {
   const [getReturn, setReturn] = useState();
 
   const init = async () => {
     try {
-        const posts = await doFetch(userId == undefined ? 
-            apiurl + '/tags/' + appId :
-            apiurl + `/media/user/${userId}`);
+        const posts = await doFetch(
+          userId == undefined
+            ? tag == undefined
+              ? apiurl + '/tags/' + appId
+              : apiurl + '/tags/' + appId + `_${tag}`
+            : apiurl + `/media/user/${userId}`
+        );
 
       // Add media url to each json array element
       posts.forEach((value, index) => {

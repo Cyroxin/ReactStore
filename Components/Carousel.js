@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { View, ScrollView, Text, Platform } from 'react-native';
 
 export const Carousel = (props) => {
-  const children = props.children;
+  const children = props.items == undefined ? (props.children == undefined ? [] : props.children) : props.items; 
+
+  // Check if content is manually set as node children or if data is given.
+  const manual = () => props.items != undefined;
 
   const itemsPerInterval =
     props.itemsPerInterval === undefined ? 1 : props.itemsPerInterval;
@@ -16,7 +19,7 @@ export const Carousel = (props) => {
     // initialise width
     setWidth(width);
     // initialise total intervals
-    const totalItems = props.children.length;
+    const totalItems = children.length;
     setIntervals(Math.ceil(totalItems / itemsPerInterval));
   };
 
@@ -81,7 +84,13 @@ export const Carousel = (props) => {
         disableIntervalMomentum={true} // Max slide change is (+/-)1
         snapToInterval={width / intervals}
       >
-        {children}
+        {manual ? children : children.map((value, index) => {
+          <Image
+            source={{ uri: value.url }}
+            style={{
+              height: 300, resizeMode: 'cover', aspectRatio: 800 / 400, width: width, display: 'flex'}}
+          ></Image>;
+        })}
       </ScrollView>
       <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'} }>
         {bullets}
