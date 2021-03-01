@@ -44,6 +44,32 @@ const Upload = (props) => {
 
   // This is reused for each text component the user adds.
   const [input, setInput] = useState();
+  const { handleInputChange, inputs, uploadErrors, reset } = useUploadForm();
+  const [image, setImage] = useState(null);
+  const [fileType, setFileType] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const { upload } = useMedia();
+  const { update, setUpdate } = useContext(MainContext);
+  const { postTag } = useTag();
+
+  const executeUpload = async () => {
+    const formData = new FormData();
+    //add title to form
+    formData.append('title', inputs.title);
+    //add description to form
+    formData.append('description', inputs.description);
+    //add image to form
+    const filename = image.split('/').pop();
+    const match = /\.(\w+)$/.exec(filename);
+    let type = match ? `${fileType}/${match[1]}` : fileType;
+    if (type === 'image/jpg') type = 'image/jpeg';
+
+    formData.append('file', {
+      uri: image,
+      name: filename,
+      type: type,
+    });
+  };
 
   const content = (
     <Content padder>

@@ -42,7 +42,7 @@ export const FloatingNavigator = (props) => {
         style={upload ? styles.blue : styles.blue}
         onPress={hasPress && props.onPress[3]}
       >
-        <Icon name={upload ? 'film' : 'home-sharp'} />
+        <Icon name={upload ? 'text' : 'home-sharp'} />
       </Button>
     </Fab>
   );
