@@ -9,9 +9,8 @@ import Login from '../Pages/Login';
 // import { MainContext } from '../contexts/MainContext';
 import { Icon } from 'native-base';
 
-const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-const isLogin = false;
+const isLoggedIn = false;
 const StackScreen = () => {
   // const { isLoggedIn } = useContext(MainContext);
   return (
@@ -20,7 +19,7 @@ const StackScreen = () => {
         <>
           <Stack.Screen
             name='Home'
-            component={TabScreen}
+            component={Home}
             options={({ route }) => ({
               headerTitle: getFocusedRouteNameFromRoute(route),
             })}

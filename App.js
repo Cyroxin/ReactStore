@@ -6,9 +6,9 @@ import PageNavigator from './Navigators/PageNavigation';
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <>
       <PageNavigator />
-    </NavigationContainer>
+    </>
   );
 };
 

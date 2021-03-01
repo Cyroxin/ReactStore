@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import {Image, useWindowDimensions} from 'react-native';
+import { Image, useWindowDimensions } from 'react-native';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
 import PostsList from '../Components/PostsList';
 import { getPosts } from '../Hooks/Api';
 
-export default function App(props) {
+const Home = () => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
 
@@ -20,8 +20,7 @@ export default function App(props) {
 
   /* Announcement Banners / Manually Highlighted Posts */
   const carousel = (
-    <Carousel width='100%'
-     onContentSizeChangeInterval={w => setWidth(w)}>
+    <Carousel width='100%' onContentSizeChangeInterval={(w) => setWidth(w)}>
       <Image
         source={{ uri: `https://dummyimage.com/800x400/daabdb/000000` }}
         style={simg}
@@ -58,7 +57,7 @@ export default function App(props) {
           </>
         }
         items={getPosts()}
-        style={{height: height}}
+        style={{ height: height }}
       />
       <FloatingNavigator
         onPress={[
@@ -70,4 +69,6 @@ export default function App(props) {
       />
     </>
   );
-}
+};
+
+export default Home;
