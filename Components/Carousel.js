@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
-import { View, ScrollView, Text, Platform } from 'react-native';
+import { View, ScrollView, Text, Image, Platform } from 'react-native';
 
 export const Carousel = (props) => {
-  const children = props.items == undefined ? (props.children == undefined ? [] : props.children) : props.items; 
-
-  // Check if content is manually set as node children or if data is given.
-  const manual = () => props.items != undefined;
+  const children = props.children; 
 
   const itemsPerInterval =
     props.itemsPerInterval === undefined ? 1 : props.itemsPerInterval;
@@ -67,9 +64,10 @@ export const Carousel = (props) => {
           setScroll(scroller);
         }}
         contentContainerStyle={{
-          width: `${100 * intervals}%`,
-          justifyContent: 'center'
+          width: `${100*intervals}%`,
+          justifyContent: 'center',
         }}
+        //style={props.style}
         showsHorizontalScrollIndicator={false}
         onContentSizeChange={(w, h) => {init(w); props.onContentSizeChangeInterval(w/intervals/itemsPerInterval,h);}}
         onScroll={(data) => {
@@ -84,13 +82,7 @@ export const Carousel = (props) => {
         disableIntervalMomentum={true} // Max slide change is (+/-)1
         snapToInterval={width / intervals}
       >
-        {manual ? children : children.map((value, index) => {
-          <Image
-            source={{ uri: value.url }}
-            style={{
-              height: 300, resizeMode: 'cover', aspectRatio: 800 / 400, width: width, display: 'flex'}}
-          ></Image>;
-        })}
+        {children}
       </ScrollView>
       <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'} }>
         {bullets}
