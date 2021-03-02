@@ -69,7 +69,7 @@ const getPosts = (userId = undefined) => {
 const useTag = () => {
   const getFilesByTag = async (tag) => {
     try {
-      const tagList = await doFetch(apiUrl + '/tags/' + tag);
+      const tagList = await doFetch(apiurl + '/tags/' + tag);
       return tagList;
     } catch (error) {
       throw new Error(error.message);
@@ -83,7 +83,7 @@ const useTag = () => {
       body: JSON.stringify(tag),
     };
     try {
-      const result = await doFetch(apiUrl + '/tags', options);
+      const result = await doFetch(apiurl + '/tags', options);
       return result;
     } catch (error) {
       throw new Error('postTag error: ' + error.message);
@@ -98,7 +98,7 @@ const useMedia = () => {
       method: 'POST',
       headers: { 'x-access-token': token },
       data: fd,
-      url: apiUrl + '/media',
+      url: apiurl + '/media',
     };
     try {
       const response = await axios(options);
@@ -110,4 +110,79 @@ const useMedia = () => {
   return { upload };
 };
 
-export { apiurl as url, getPosts, useTag, useMedia };
+const useLogin = () => {
+  const postLogin = async (userCredentials) => {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userCredentials),
+    };
+    try {
+      const userData = await doFetch(apiurl + '/login', options);
+      return userData;
+    } catch (error) {
+      throw new Error('postLogin error: ' + error.message);
+    }
+  };
+  return { postLogin };
+};
+
+const useUser = () => {
+  const postRegister = async (inputs) => {
+    console.log('trying to create user', inputs);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    };
+    try {
+      const json = await doFetch(apiurl + '/users', fetchOptions);
+      console.log('register resp', json);
+      return json;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
+
+  const checkToken = async (token) => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: { 'x-access-token': token },
+      };
+      const userData = await doFetch(apiurl + '/users/user', options);
+      return userData;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+  const checkIfUserIsAvailable = async (username) => {
+    try {
+      const result = await doFetch(apiurl + '/users/username/' + username);
+      return result.available;
+    } catch (error) {
+      throw new Error('apiHooks checkIfUserIsAvailable', error.message);
+    }
+  };
+  const getUserById = async (id, token) => {
+    try {
+      const options = {
+        headers: {
+          method: 'GET',
+          'x-access-token': token,
+        },
+      };
+
+      const userData = await doFetch(apiurl + '/users/' + id, options);
+      return userData;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
+
+  return { postRegister, checkToken, checkIfUserIsAvailable, getUserById };
+};
+
+export { apiurl as url, getPosts, useTag, useMedia, useLogin, useUser };

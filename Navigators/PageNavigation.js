@@ -8,11 +8,14 @@ import Home from '../Pages/Home';
 import Login from '../Pages/Login';
 // import { MainContext } from '../contexts/MainContext';
 import { Icon } from 'native-base';
+import { MainContext } from '../contexts/MainContext';
+import Profile from '../Pages/Profile';
+import Upload from '../Pages/Upload';
 
 const Stack = createStackNavigator();
-const isLoggedIn = false;
+
 const StackScreen = () => {
-  // const { isLoggedIn } = useContext(MainContext);
+  const { isLoggedIn } = useContext(MainContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
@@ -24,6 +27,8 @@ const StackScreen = () => {
               headerTitle: getFocusedRouteNameFromRoute(route),
             })}
           />
+          <Stack.Screen name='Profile' component={Profile} />
+          <Stack.Screen name='Upload' component={Upload} />
         </>
       ) : (
         <>
@@ -40,7 +45,7 @@ const StackScreen = () => {
   );
 };
 
-const PageNavigator = () => {
+const PageNavigation = () => {
   return (
     <NavigationContainer>
       <StackScreen />
@@ -48,4 +53,4 @@ const PageNavigator = () => {
   );
 };
 
-export default PageNavigator;
+export default PageNavigation;

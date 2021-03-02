@@ -6,7 +6,7 @@ import SortSelector from '../Components/SortSelector';
 import PostsList from '../Components/PostsList';
 import { getPosts } from '../Hooks/Api';
 
-const Home = () => {
+const Home = (props) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
 
@@ -62,7 +62,7 @@ const Home = () => {
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),
-          () => console.log('profile'),
+          () => props.navigation.navigate('Profile'),
           () => props.navigation.navigate('Upload'),
           () => console.log('home'),
         ]}
