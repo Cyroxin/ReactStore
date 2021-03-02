@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
             <View style={styles.appName}>
-              <Text h1>My App</Text>
+              <Text h1>Handcrafted Items</Text>
             </View>
             <View style={styles.form}>
               <Card>
