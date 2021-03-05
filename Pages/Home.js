@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import {Image, Text, View, Touchable, TouchableOpacityBase, TouchableWithoutFeedback, TouchableWithoutFeedbackBase, useWindowDimensions} from 'react-native';
+import {
+  Image,
+  Text,
+  View,
+  Touchable,
+  TouchableOpacityBase,
+  TouchableWithoutFeedback,
+  TouchableWithoutFeedbackBase,
+  useWindowDimensions,
+} from 'react-native';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
 import PostsList from '../Components/PostsList';
 import { getPosts } from '../Hooks/Api';
 
-export default function App(props) {
+const Home = (props) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
 
@@ -22,8 +31,8 @@ export default function App(props) {
     height: 300,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  };
 
   /* Announcement Banners / Manually Highlighted Posts */
   const carousel = (
@@ -78,17 +87,19 @@ export default function App(props) {
             <SortSelector></SortSelector>
           </>
         }
-        items={getPosts(undefined,props.tag)}
-        style={{height: height}}
+        items={getPosts(undefined, props.tag)}
+        style={{ height: height }}
       />
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),
-          () => console.log('profile'),
+          () => props.navigation.navigate('Profile'),
           () => props.navigation.navigate('Upload'),
           () => console.log('home'),
         ]}
       />
     </>
   );
-}
+};
+
+export default Home;
