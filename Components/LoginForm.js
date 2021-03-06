@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import useLoginForm from '../Hooks/loginHooks';

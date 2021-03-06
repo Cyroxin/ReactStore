@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { MainContext } from '../contexts/MainContext';
@@ -12,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '../Hooks/Api';
 import LoginForm from '../Components/LoginForm';
 import RegisterForm from '../Components/RegisterForm';
-import { Card, ListItem, Text } from 'react-native-elements';
+import { Card, ListItem } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Login = ({ navigation }) => {
@@ -27,8 +29,8 @@ const Login = ({ navigation }) => {
     if (userToken) {
       try {
         const userData = await checkToken(userToken);
-        setIsLoggedIn(true);
         setUser(userData);
+        setIsLoggedIn(true);
         navigation.navigate('Home');
       } catch (error) {
         console.log('token check failed', error.message);
@@ -46,7 +48,7 @@ const Login = ({ navigation }) => {
         behavior={'padding'}
         enabled
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Platform.OS == 'web' ? undefined : Keyboard.dismiss}>
           <View style={styles.inner}>
             <View style={styles.appName}>
               <Text h1>Handcrafted Items</Text>
@@ -57,13 +59,13 @@ const Login = ({ navigation }) => {
                   <>
                     <Card.Title h4>Login</Card.Title>
                     <Card.Divider />
-                    <LoginForm navigation={navigation} />
+                    <LoginForm/>
                   </>
                 ) : (
                   <>
                     <Card.Title h4>Register</Card.Title>
                     <Card.Divider />
-                    <RegisterForm navigation={navigation} />
+                    <RegisterForm/>
                   </>
                 )}
                 <ListItem

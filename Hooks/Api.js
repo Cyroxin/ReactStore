@@ -16,56 +16,63 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-// Gets a list of media either by userId or custom tag. If no tag is given, all app posts are shown.
-const getPosts = (userId = undefined, tag = undefined) => {
-  const [getReturn, setReturn] = useState();
+// Gets a list of media either by userId or custom tag. If nothing is given, all app posts are shown.
+const getPosts = async (userId, tag) => {
+  try {
+    const posts = await doFetch(
+      userId == undefined
+        ? tag == undefined
+          ? apiurl + '/tags/' + appId
+          : apiurl + '/tags/' + appId + `_${tag}`
+        : apiurl + `/media/user/${userId}`
+    );
 
-  const init = async () => {
-    try {
-      const posts = await doFetch(
-        userId == undefined
+    console.log(
+      'search:' +
+        (userId == undefined
           ? tag == undefined
             ? apiurl + '/tags/' + appId
             : apiurl + '/tags/' + appId + `_${tag}`
-          : apiurl + `/media/user/${userId}`
-      );
+          : apiurl + `/media/user/${userId}`)
+    );
 
-      // Add media url to each json array element
-      posts.forEach((value, index) => {
-        // eslint-disable-next-line no-prototype-builtins
-        if (value.hasOwnProperty('filename')) {
-          const rawname = value.filename.substring(
-            0,
-            value.filename.lastIndexOf('.')
-          );
+    const likes = useLike();
 
-          posts[index].url =
-            value.media_type != 'video'
-              ? apiurl + '/uploads/' + value.filename
-              : apiurl + '/uploads/' + rawname + '.png';
+    // Add media url to each json array element
+    for (let index = 0; index < posts.length; index++) {
+      const value = posts[index];
 
-          posts[index].thumbnail = [
-            apiurl + '/uploads/' + rawname + '-tn160.png',
-            apiurl + '/uploads/' + rawname + '-tn320.png',
-            apiurl + '/uploads/' + rawname + '-tn640.png',
-          ];
-        } else {
-          posts[index].url = '';
-          posts[index].thumbnail = [];
-        }
-      });
+      // eslint-disable-next-line no-prototype-builtins
+      if (value.hasOwnProperty('filename')) {
+        const rawname = value.filename.substring(
+          0,
+          value.filename.lastIndexOf('.')
+        );
 
-      setReturn(posts);
-    } catch (exp) {
-      console.log(exp.message);
-    }
-  };
+        posts[index].url =
+          value.media_type != 'video'
+            ? apiurl + '/uploads/' + value.filename
+            : apiurl + '/uploads/' + rawname + '.png';
 
-  useEffect(() => {
-    init();
-  }, []);
+        posts[index].thumbnail = [
+          apiurl + '/uploads/' + rawname + '-tn160.png',
+          apiurl + '/uploads/' + rawname + '-tn320.png',
+          apiurl + '/uploads/' + rawname + '-tn640.png',
+        ];
+      } else {
+        posts[index].url = '';
+        posts[index].thumbnail = [];
+      }
+      
+      posts[index].likes = await likes.getLikesByFile(value.file_id);
+      if (posts[index].likes == undefined)
+        posts[index].likes = [];
+    };
 
-  return getReturn;
+    return posts;
+  } catch (exp) {
+    console.log(exp.message);
+  }
 };
 
 const useTag = () => {
@@ -92,6 +99,32 @@ const useTag = () => {
     }
   };
   return { getFilesByTag, postTag };
+};
+
+const useLike = () => {
+  const getLikesByFile = async (postId) => {
+    try {
+      const likesList = await doFetch(apiurl + '/favourites/file/' + postId);
+      return likesList;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const postLikes = async (file_id, token) => {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+      body: JSON.stringify(file_id),
+    };
+    try {
+      const result = await doFetch(apiurl + '/favourites', options);
+      return result;
+    } catch (error) {
+      throw new Error('postTag error: ' + error.message);
+    }
+  };
+  return { getLikesByFile, postLikes };
 };
 
 const useMedia = () => {
@@ -187,4 +220,4 @@ const useUser = () => {
   return { postRegister, checkToken, checkIfUserIsAvailable, getUserById };
 };
 
-export { apiurl as url, getPosts, useTag, useMedia, useLogin, useUser };
+export { apiurl as url, getPosts, useTag, useLike, useMedia, useLogin, useUser };

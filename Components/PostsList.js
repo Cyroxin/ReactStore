@@ -1,11 +1,12 @@
 import { Body, Button, Icon, Card, CardItem, Left, List, ListItem, Picker, Right, Content } from 'native-base';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, ScrollView, Text, Platform, Image, FlatList } from 'react-native';
-import toReadableTime from '../utils/relativetime';
+import { toReadableTime } from '../utils/relativetime';
 
 /* Accepts either array Items[] or loader function which accepts loader(start,limit) index calls */
 export const PostsList = (props) => {
   const children = props.children;
+  const columns = Platform.OS == 'web' ? 3 : 1;
 
   /* Items[] element data:
     url       String  Link to the post image
@@ -16,6 +17,7 @@ export const PostsList = (props) => {
     filename 	String  Name of the media file in the uploads folder.
     filesize 	String  Size of the media file in bytes.
     title 	String 	Title of the media file.
+    likes   Array   Post like data.
     description 	String 	File description.
     media_type 	String 	audio, image or video
     mime_type 	String 	MIME type of the file.
@@ -31,48 +33,42 @@ export const PostsList = (props) => {
       style={props.style}
       data={props.items}
       keyExtractor={(_, index) => index.toString()}
+      numColumns={columns}
+      columnWrapperStyle={
+        columns != 1 ? { justifyContent: 'space-evenly' } : undefined
+      }
       renderItem={({ item }) => (
-        <ListItem>
-          <Card style={{ width: '100%' }}>
-            <CardItem>
-              <Text>{item.title}</Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Image
-                source={{
-                  uri: item.url,
-                }}
-                style={{
-                  width: '100%',
-                  height: 200,
-                  resizeMode: 'cover',
-                  aspectRatio: 800 / 400,
-                }}
-              />
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Button transparent>
-                  <>
-                    <Icon active name='thumbs-up' />
-                    <Text>12 Likes</Text>
-                  </>
-                </Button>
-              </Left>
-              <Body>
-                <Button transparent style={{ alignSelf: 'center' }}>
-                  <Icon active name='chatbubbles' />
-                  <Text>4 Comments</Text>
-                </Button>
-              </Body>
-              <Right>
-                <Text>
-                  Uploaded {toReadableTime(Date.parse(item.time_added))}
-                </Text>
-              </Right>
-            </CardItem>
-          </Card>
-        </ListItem>
+        <Card style={{ width: `${99 / columns}%` }}>
+          <Image
+            source={{
+              uri: item.thumbnail[1],
+            }}
+            style={{
+              width: '100%',
+              height: 200,
+              resizeMode: 'cover',
+              aspectRatio: 800 / 400,
+            }}
+          />
+          <CardItem>
+            <Left>
+              <Button transparent>
+                <>
+                  <Icon active name='thumbs-up' />
+                  <Text>{item.likes.length} Likes</Text>
+                </>
+              </Button>
+            </Left>
+            <Body>
+              <Text style={{ alignSelf: 'center' }}>{item.title}</Text>
+            </Body>
+            <Right>
+              <Text>
+                Uploaded {toReadableTime(Date.parse(item.time_added))}
+              </Text>
+            </Right>
+          </CardItem>
+        </Card>
       )}
     />
   );

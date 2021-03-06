@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Text,
@@ -13,18 +13,14 @@ import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
 import PostsList from '../Components/PostsList';
-import { getPosts } from '../Hooks/Api';
+import { getPosts, useLike } from '../Hooks/Api';
+import { timeSince } from '../utils/relativetime';
+import PopupInput from '../Components/PopupInput';
+import { Pressable } from 'react-native';
 
-const Home = (props) => {
+const Home = ({navigation, route}) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
-
-  const simg = {
-    height: 400,
-    resizeMode: 'cover',
-    aspectRatio: 800 / 400,
-    width: width,
-  };
 
   const banner = {
     width: width,
@@ -34,67 +30,125 @@ const Home = (props) => {
     alignItems: 'center',
   };
 
-  /* Announcement Banners / Manually Highlighted Posts */
-  const carousel = (
-    <Carousel onContentSizeChangeInterval={(w) => setWidth(w)}>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Handicraft')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Handicraft</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Art')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Art</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Textiles')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Textiles</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Electronics')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Electronics</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Crafts')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Crafts</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Food and Drink')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Food and Drink</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={(e) => console.log('Other')}>
-        <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-          <Text style={{ fontSize: 50 }}>Other</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    </Carousel>
-  );
-
-  // style={{ height: height }}
+  const [posts, setPosts] = useState();
+  useEffect(() => {getPosts(undefined, route.tag).then((out) => {out.sort((a, b) => timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))); setPosts(out); console.log(out);})}, [])
 
   return (
     <>
       <PostsList
         ListHeaderComponent={
           <>
-            {carousel}
+            <Carousel onContentSizeChangeInterval={(w) => setWidth(w)}>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, undefined).then((out) => setPosts(out))
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Handicraft</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, 'art').then((out) => setPosts(out))
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Art</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, 'textiles').then((out) => setPosts(out))
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Textiles</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, 'electronics').then((out) =>
+                    setPosts(out)
+                  )
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Electronics</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, 'crafts').then((out) => setPosts(out))
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Crafts</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={(e) =>
+                  getPosts(undefined, 'food and drink').then((out) =>
+                    setPosts(out)
+                  )
+                }
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Food and Drink</Text>
+                </View>
+              </Pressable>
+              <PopupInput
+                onPress={[
+                  () => {},
+                  (text) => {
+                    getPosts(undefined, text).then((out) => setPosts(out));
+                  },
+                ]}
+              >
+                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                  <Text style={{ fontSize: 50 }}>Other</Text>
+                </View>
+              </PopupInput>
+            </Carousel>
             {/* Sort List */}
-            <SortSelector></SortSelector>
+            <SortSelector
+              onPress={[
+                () => {
+                  let newlist = posts.slice();
+                  newlist.sort(
+                    (a, b) => new Date(a.time_added) < new Date(b.time_added)
+                  );
+                  setPosts(newlist);
+                },
+                () => {
+                  let newlist = posts.slice();
+                  newlist.sort(
+                    (a, b) =>
+                      timeSince(new Date(a.time_added)) > 604800 ||
+                      timeSince(new Date(b.time_added)) < 604800 ||
+                      (timeSince(new Date(a.time_added)) < 604800 &&
+                        timeSince(new Date(b.time_added)) < 604800 &&
+                        a.likes.length < b.likes.length)
+                  );
+                  setPosts(newlist);
+                },
+                () => {
+                  let newlist = posts.slice();
+                  newlist.sort((a, b) => a.likes.length < b.likes.length);
+                  setPosts(newlist);
+                },
+              ]}
+            />
           </>
         }
-        items={getPosts(undefined, props.tag)}
-        style={{ height: height }}
+        items={posts}
+        style={{ height: height, margin: 0 }}
       />
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),
-          () => props.navigation.navigate('Profile'),
-          () => props.navigation.navigate('Upload'),
+          () => navigation.navigate('Profile'),
+          () => navigation.navigate('Upload'),
           () => console.log('home'),
         ]}
       />

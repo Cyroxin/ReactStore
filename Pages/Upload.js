@@ -47,10 +47,10 @@ const Upload = (props) => {
   const { handleInputChange, inputs, uploadErrors, reset } = useUploadForm();
   const [image, setImage] = useState(null);
   const [fileType, setFileType] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const { upload } = useMedia();
-  const { update, setUpdate } = useContext(MainContext);
-  const { postTag } = useTag();
+  //const [isUploading, setIsUploading] = useState(false);
+  //const { upload } = useMedia();
+  //const { update, setUpdate } = useContext(MainContext);
+  //const { postTag } = useTag();
 
   const executeUpload = async () => {
     const formData = new FormData();
