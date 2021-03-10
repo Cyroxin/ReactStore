@@ -1,11 +1,12 @@
 import { Button, Container, Fab, Header, Icon } from 'native-base';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, ScrollView, Text, Platform, StyleSheet } from 'react-native';
 
 export const FloatingNavigator = (props) => {
   const children = props.children;
 
   const upload = props.upload != undefined;
+  const back = props.back != undefined && props.back == true;
   const hasPress = props.onPress != undefined;
 
   const [floatingNavigator, setFloatingNavigator] = React.useState();
@@ -13,19 +14,23 @@ export const FloatingNavigator = (props) => {
 
   return (
     <Fab
+      style={styles.btn}
+      {...props}
       ref={(c) => {
         setFloatingNavigator(c);
       }}
       active={upload ? true : expanded}
       direction='up'
-      style={props.style != undefined ? props.style : styles.btn}
-      containerStyle={{}}
       position='bottomRight'
-      onPress={
-        upload ? hasPress && props.onPress[0] : () => setExpanded(!expanded)
-      }
+      onPress={() => {
+        if (hasPress) props.onPress[0]();
+
+        if (!upload && !back) setExpanded(!expanded);
+      }}
     >
-      <Icon name={upload ? 'checkmark-sharp' : 'menu-sharp'} />
+      <Icon
+        name={back ? 'arrow-back' : upload ? 'checkmark-sharp' : 'menu-sharp'}
+      />
       <Button
         style={upload ? styles.red : styles.blue}
         onPress={hasPress && props.onPress[1]}
