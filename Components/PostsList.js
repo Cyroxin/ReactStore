@@ -1,12 +1,32 @@
-import { Body, Button, Icon, Card, CardItem, Left, List, ListItem, Picker, Right, Content } from 'native-base';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, Text, Platform, Image, FlatList } from 'react-native';
-import { toReadableTime } from '../utils/relativetime';
+import {
+  Body,
+  Button,
+  Icon,
+  Card,
+  CardItem,
+  Left,
+  List,
+  ListItem,
+  Picker,
+  Right,
+  Content,
+} from "native-base";
+import Post from "./Post";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  ScrollView,
+  Text,
+  Platform,
+  Image,
+  FlatList,
+} from "react-native";
+import PropTypes from "prop-types";
 
 /* Accepts either array Items[] or loader function which accepts loader(start,limit) index calls */
-export const PostsList = (props) => {
-  const children = props.children;
-  const columns = Platform.OS == 'web' ? 3 : 1;
+const PostsList = ({ props }) => {
+  //const children = props.children;
+  //const columns = Platform.OS == "web" ? 3 : 1;
 
   /* Items[] element data:
     url       String  Link to the post image
@@ -33,45 +53,18 @@ export const PostsList = (props) => {
       style={props.style}
       data={props.items}
       keyExtractor={(_, index) => index.toString()}
-      numColumns={columns}
-      columnWrapperStyle={
-        columns != 1 ? { justifyContent: 'space-evenly' } : undefined
-      }
-      renderItem={({ item }) => (
-        <Card style={{ width: `${99 / columns}%` }}>
-          <Image
-            source={{
-              uri: item.thumbnail[1],
-            }}
-            style={{
-              width: '100%',
-              height: 200,
-              resizeMode: 'cover',
-              aspectRatio: 800 / 400,
-            }}
-          />
-          <CardItem>
-            <Left>
-              <Button transparent>
-                <>
-                  <Icon active name='thumbs-up' />
-                  <Text>{item.likes.length} Likes</Text>
-                </>
-              </Button>
-            </Left>
-            <Body>
-              <Text style={{ alignSelf: 'center' }}>{item.title}</Text>
-            </Body>
-            <Right>
-              <Text>
-                Uploaded {toReadableTime(Date.parse(item.time_added))}
-              </Text>
-            </Right>
-          </CardItem>
-        </Card>
-      )}
+      //numColumns={columns}
+      // columnWrapperStyle={
+      //   columns != 1 ? { justifyContent: "space-evenly" } : undefined
+      // }
+      renderItem={({ item }) => <Post />}
     />
   );
+};
+
+PostsList.propTypes = {
+  item: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default PostsList;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Text,
@@ -8,30 +8,39 @@ import {
   TouchableWithoutFeedback,
   TouchableWithoutFeedbackBase,
   useWindowDimensions,
-} from 'react-native';
-import Carousel from '../Components/Carousel';
-import FloatingNavigator from '../Components/FloatingNavigator';
-import SortSelector from '../Components/SortSelector';
-import PostsList from '../Components/PostsList';
-import { getPosts, useLike } from '../Hooks/Api';
-import { timeSince } from '../utils/relativetime';
-import PopupInput from '../Components/PopupInput';
-import { Pressable } from 'react-native';
+} from "react-native";
+import Carousel from "../Components/Carousel";
+import FloatingNavigator from "../Components/FloatingNavigator";
+import SortSelector from "../Components/SortSelector";
+import PostsList from "../Components/PostsList";
+import { getPosts, useLike } from "../Hooks/Api";
+import { timeSince } from "../utils/relativetime";
+import PopupInput from "../Components/PopupInput";
+import { Pressable } from "react-native";
 
-const Home = ({navigation, route}) => {
+const Home = ({ navigation, route }) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
 
   const banner = {
     width: width,
     height: 300,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const [posts, setPosts] = useState();
-  useEffect(() => {getPosts(undefined, route.tag).then((out) => {out.sort((a, b) => timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))); setPosts(out); console.log(out);})}, [])
+  useEffect(() => {
+    getPosts(undefined, route.tag).then((out) => {
+      out.sort(
+        (a, b) =>
+          timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))
+      );
+      setPosts(out);
+      console.log(out);
+    });
+  }, []);
 
   return (
     <>
@@ -44,56 +53,56 @@ const Home = ({navigation, route}) => {
                   getPosts(undefined, undefined).then((out) => setPosts(out))
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Handicraft</Text>
                 </View>
               </Pressable>
               <Pressable
                 onPress={(e) =>
-                  getPosts(undefined, 'art').then((out) => setPosts(out))
+                  getPosts(undefined, "art").then((out) => setPosts(out))
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Art</Text>
                 </View>
               </Pressable>
               <Pressable
                 onPress={(e) =>
-                  getPosts(undefined, 'textiles').then((out) => setPosts(out))
+                  getPosts(undefined, "textiles").then((out) => setPosts(out))
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Textiles</Text>
                 </View>
               </Pressable>
               <Pressable
                 onPress={(e) =>
-                  getPosts(undefined, 'electronics').then((out) =>
+                  getPosts(undefined, "electronics").then((out) =>
                     setPosts(out)
                   )
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Electronics</Text>
                 </View>
               </Pressable>
               <Pressable
                 onPress={(e) =>
-                  getPosts(undefined, 'crafts').then((out) => setPosts(out))
+                  getPosts(undefined, "crafts").then((out) => setPosts(out))
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Crafts</Text>
                 </View>
               </Pressable>
               <Pressable
                 onPress={(e) =>
-                  getPosts(undefined, 'food and drink').then((out) =>
+                  getPosts(undefined, "food and drink").then((out) =>
                     setPosts(out)
                   )
                 }
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Food and Drink</Text>
                 </View>
               </Pressable>
@@ -105,7 +114,7 @@ const Home = ({navigation, route}) => {
                   },
                 ]}
               >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                <View style={{ ...banner, backgroundColor: "#d9baba" }}>
                   <Text style={{ fontSize: 50 }}>Other</Text>
                 </View>
               </PopupInput>
@@ -146,10 +155,10 @@ const Home = ({navigation, route}) => {
       />
       <FloatingNavigator
         onPress={[
-          () => console.log('disabled by fabnav'),
-          () => navigation.navigate('Profile'),
-          () => navigation.navigate('Upload'),
-          () => console.log('home'),
+          () => console.log("disabled by fabnav"),
+          () => navigation.navigate("Profile"),
+          () => navigation.navigate("Upload"),
+          () => console.log("home"),
         ]}
       />
     </>
