@@ -16,7 +16,7 @@ const constraints = {
       message: 'cannot be empty',
     },
     length: {
-      minimum: 8,
+      minimum: 0,
       message: 'min length is 5 characters',
     },
   },

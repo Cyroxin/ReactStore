@@ -10,6 +10,9 @@ import {
   FlatList,
   Platform,
   TextInput,
+  Button,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {
   Container,
@@ -25,18 +28,27 @@ import {
   Thumbnail,
   Left,
   Body,
-  Button,
   Right,
   Fab,
   Input,
   Item,
   Title,
   Textarea,
+  CheckBox,
 } from 'native-base';
 import useUploadForm from '../Hooks/UploadHooks';
 import Carousel from '../Components/Carousel';
 import FloatingNavigator from '../Components/FloatingNavigator';
 import SortSelector from '../Components/SortSelector';
+import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMedia, useTag } from '../Hooks/Api';
+import PropTypes from 'prop-types';
+import { MainContext } from '../contexts/MainContext';
+import { SafeAreaView } from 'react-native';
+import GlobalStyles from '../utils/GlobalStyle';
+
+const appId = 'cyroxin'; // TODO: CHANGE ME
 
 const Upload = (props) => {
   const height = useWindowDimensions().height;
@@ -47,11 +59,14 @@ const Upload = (props) => {
   const { handleInputChange, inputs, uploadErrors, reset } = useUploadForm();
   const [image, setImage] = useState(null);
   const [fileType, setFileType] = useState('');
-  //const [isUploading, setIsUploading] = useState(false);
-  //const { upload } = useMedia();
-  //const { update, setUpdate } = useContext(MainContext);
-  //const { postTag } = useTag();
-
+  const [isUploading, setIsUploading] = useState(false);
+  const { upload } = useMedia();
+  const { update, setUpdate } = useContext(MainContext);
+  const { postTag } = useTag();
+  // const [catagory, setCatagory] = useState([]);
+  const catagory = [];
+  // catagory.push('art');
+  // catagory.push('electronics');
   const executeUpload = async () => {
     const formData = new FormData();
     //add title to form
@@ -69,74 +84,181 @@ const Upload = (props) => {
       name: filename,
       type: type,
     });
+    try {
+      setIsUploading(true);
+      const userToken = await AsyncStorage.getItem('userToken');
+      const resp = await upload(formData, userToken);
+      console.log('upload response', resp);
+      const tagResponse = await postTag(
+        {
+          file_id: resp.file_id,
+          tag: appId,
+        },
+        userToken
+      );
+      let tagCatagory;
+      for (let i = 0; i < catagory.length; i++) {
+        tagCatagory = await postTag(
+          {
+            file_id: resp.file_id,
+            tag: `${appId}_${catagory[i]}`,
+          },
+          userToken
+        );
+      }
+
+      console.log('posting app identifier', tagResponse);
+      console.log('posting app catagory', tagCatagory);
+      Alert.alert(
+        'Upload',
+        'File uploaded',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUpdate(update + 1);
+              doReset();
+              props.navigation.navigate('Home');
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      Alert.alert('Upload', 'Failed');
+      console.error(error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const content = (
-    <Content padder>
-      <Item
-        underline={false}
-        style={{ width: '100%', margin: 20, flexDirection: 'column' }}
-      >
-        <Textarea
-          disabled
-          multiline
-          underline={false}
-          onChangeText={(text) => setInput(text)}
-          value='Some already written text that cannot be changed.'
-          style={{ textAlignVertical: 'top', width: '100%' }}
-        />
-      </Item>
-      <Image
-        source={{ uri: 'https://dummyimage.com/800x400/badbcb/000000' }}
-        style={img}
-      />
-      <Item
-        underline={false}
-        style={{ width: '100%', margin: 10, flexDirection: 'column' }}
-      >
-        <Input
-          multiline
-          style={{ textAlignVertical: 'top', width: '100%' }}
-          numberOfLines={10}
-          placeholder={'Freshly added textbox, press check when done.'}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <Icon
-            style={{ color: 'red', padding: 5, margin: 10 }}
-            name='close-circle'
-          />
-          <Icon
-            style={{ color: 'green', padding: 5, margin: 10 }}
-            name='checkmark-circle'
-          />
-        </View>
-      </Item>
-    </Content>
-  );
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const {
+          status,
+        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async (library) => {
+    let result = null;
+    const options = {
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+    };
+
+    if (library) {
+      result = await ImagePicker.launchImageLibraryAsync(options);
+    } else {
+      result = await ImagePicker.launchCameraAsync(options);
+    }
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setFileType(result.type);
+      setImage(result.uri);
+    }
+  };
+
+  const doReset = () => {
+    setImage(null);
+    reset();
+  };
 
   return (
-    <>
-      <ScrollView style={{ height: height }}>{content}</ScrollView>
-      <FloatingNavigator
-        upload
-        onPress={[
-          () => props.navigation.goBack(),
-          () => props.navigation.goBack(),
-          () => console.log('image'),
-          () => console.log('text'),
-        ]}
-      />
-    </>
+    <SafeAreaView style={GlobalStyles.droidSafeArea}>
+      <View style={styles.container}>
+        <ScrollView>
+          <Text style={styles.headerText}>Upload Media file</Text>
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: '100%', height: undefined, aspectRatio: 1 }}
+            />
+          )}
+          <Input
+            style={styles.titleInput}
+            placeholder='title'
+            value={inputs.title}
+            onChangeText={(txt) => handleInputChange('title', txt)}
+            errorMessage={uploadErrors.title}
+          />
+          <Input
+            style={styles.descriptionInput}
+            placeholder='description'
+            value={inputs.description}
+            onChangeText={(txt) => handleInputChange('description', txt)}
+            errorMessage={uploadErrors.description}
+          />
+          <Text style={styles.catagoryText}>Catagory</Text>
+          {isUploading && <ActivityIndicator size='large' color='#0000ff' />}
+        </ScrollView>
+        <FloatingNavigator
+          upload
+          onPress={[
+            () => executeUpload(),
+            () => props.navigation.goBack(),
+            () => pickImage(true),
+            () => pickImage(false),
+            () => doReset(),
+            () => console.log('tags'),
+          ]}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
-const img = {
-  width: 800,
-  height: 400,
-  resizeMode: 'center',
-  aspectRatio: 800 / 400,
-  margin: 10,
-  alignSelf: 'center',
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(204, 252, 236)',
+  },
+  picker: {
+    flex: 1,
+    paddingTop: 0,
+    alignItems: 'center',
+  },
+
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'blue',
+  },
+  titleInput: {
+    marginTop: 50,
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 8,
+    margin: 10,
+    width: 200,
+  },
+  descriptionInput: {
+    marginTop: 25,
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 8,
+    margin: 4,
+    width: 300,
+    height: 100,
+  },
+  catagoryText: {
+    marginTop: 25,
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+});
 
 export default Upload;

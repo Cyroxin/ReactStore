@@ -18,7 +18,7 @@ import { timeSince } from '../utils/relativetime';
 import PopupInput from '../Components/PopupInput';
 import { Pressable } from 'react-native';
 
-const Home = ({navigation, route}) => {
+const Home = ({ navigation, route }) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
 
@@ -31,7 +31,16 @@ const Home = ({navigation, route}) => {
   };
 
   const [posts, setPosts] = useState();
-  useEffect(() => {getPosts(undefined, route.tag).then((out) => {out.sort((a, b) => timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))); setPosts(out); console.log(out);})}, [])
+  useEffect(() => {
+    getPosts(undefined, route.tag).then((out) => {
+      out.sort(
+        (a, b) =>
+          timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))
+      );
+      setPosts(out);
+      console.log(out);
+    });
+  }, []);
 
   return (
     <>

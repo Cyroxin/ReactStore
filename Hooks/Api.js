@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 
+import axios from 'axios';
+
 const apiurl = 'https://media-new.mw.metropolia.fi/wbma';
 const appId = 'cyroxin'; // TODO: CHANGE ME
 
@@ -63,11 +65,10 @@ const getPosts = async (userId, tag) => {
         posts[index].url = '';
         posts[index].thumbnail = [];
       }
-      
+
       posts[index].likes = await likes.getLikesByFile(value.file_id);
-      if (posts[index].likes == undefined)
-        posts[index].likes = [];
-    };
+      if (posts[index].likes == undefined) posts[index].likes = [];
+    }
 
     return posts;
   } catch (exp) {
@@ -220,4 +221,12 @@ const useUser = () => {
   return { postRegister, checkToken, checkIfUserIsAvailable, getUserById };
 };
 
-export { apiurl as url, getPosts, useTag, useLike, useMedia, useLogin, useUser };
+export {
+  apiurl as url,
+  getPosts,
+  useTag,
+  useLike,
+  useMedia,
+  useLogin,
+  useUser,
+};
