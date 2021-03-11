@@ -35,15 +35,24 @@ const Home = ({ navigation, route }) => {
 
   const [posts, setPosts] = useState();
   useEffect(() => {
-    getPosts(undefined, route.tag).then((out) => {
+    getPosts(user_id, tag).then((out) => {
       out.sort(
         (a, b) =>
           timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))
       );
       setPosts(out);
-      console.log(out);
     });
   }, []);
+
+  const setTag = (tag) => {
+    getPosts(undefined, tag).then((out) => {
+      out.sort(
+        (a, b) =>
+          timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))
+      );
+      setPosts(out);
+    });
+  };
 
   return (
     <>

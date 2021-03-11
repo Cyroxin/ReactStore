@@ -60,7 +60,10 @@ const Profile = ({ navigation }) => {
             />
             <Text>{user.full_name}</Text>
           </ListItem>
-          <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
+          <ListItem
+            bottomDivider
+            onPress={() => navigation.push('Home', { user_id: user.user_id })}
+          >
             <Avatar icon={{ name: 'perm-media', color: 'black' }} />
             <ListItem.Content>
               <ListItem.Title>My Files</ListItem.Title>
