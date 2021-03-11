@@ -13,6 +13,7 @@ import {
   Button,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   Container,
@@ -34,7 +35,6 @@ import {
   Item,
   Title,
   Textarea,
-  CheckBox,
 } from 'native-base';
 import useUploadForm from '../Hooks/UploadHooks';
 import Carousel from '../Components/Carousel';
@@ -63,9 +63,16 @@ const Upload = (props) => {
   const { upload } = useMedia();
   const { update, setUpdate } = useContext(MainContext);
   const { postTag } = useTag();
-  // const [catagory, setCatagory] = useState([]);
+  const [tagInput, setTagInput] = useState('');
+  const [value, onChangeText] = useState('');
   const catagory = [];
-  // catagory.push('art');
+  if (tagInput != '') {
+    catagory.push(tagInput);
+  }
+
+  if (value != '') {
+    catagory.push(value);
+  }
   // catagory.push('electronics');
   const executeUpload = async () => {
     const formData = new FormData();
@@ -181,7 +188,7 @@ const Upload = (props) => {
           {image && (
             <Image
               source={{ uri: image }}
-              style={{ width: '100%', height: undefined, aspectRatio: 1 }}
+              style={{ width: '100%', height: '30%', aspectRatio: 1 }}
             />
           )}
           <Input
@@ -198,8 +205,37 @@ const Upload = (props) => {
             onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
           />
-          <Text style={styles.catagoryText}>Catagory</Text>
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={tagInput}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setTagInput(itemValue)}
+            >
+              <Picker.Item label='Select' value='' />
+              <Picker.Item label='Art' value='art' />
+              <Picker.Item label='Textiles' value='textiles' />
+              <Picker.Item label='Electronics' value='electronics' />
+              <Picker.Item label='Crafts' value='crafts' />
+              <Picker.Item label='Food and Drink' value='food and drink' />
+            </Picker>
+          </View>
+          <Input
+            style={{
+              marginTop: 0,
+              marginBottom: 10,
+              borderColor: 'gray',
+              borderWidth: 1,
+              borderColor: 'black',
+              padding: 8,
+            }}
+            placeholder='Other Catagory'
+            onChangeText={(text) => onChangeText(text)}
+            value={value}
+          />
+
           {isUploading && <ActivityIndicator size='large' color='#0000ff' />}
+
+          <Button style={styles.resetButton} title='Reset' onPress={doReset} />
         </ScrollView>
         <FloatingNavigator
           upload
@@ -225,7 +261,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgb(204, 252, 236)',
   },
+  kav: {
+    flex: 1,
+  },
   picker: {
+    marginTop: 0,
     flex: 1,
     paddingTop: 0,
     alignItems: 'center',
@@ -238,26 +278,36 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   titleInput: {
-    marginTop: 50,
+    marginTop: 30,
     borderWidth: 1,
     borderColor: 'black',
     padding: 8,
     margin: 10,
-    width: 200,
   },
   descriptionInput: {
-    marginTop: 25,
+    marginTop: 20,
     borderWidth: 1,
     borderColor: 'black',
     padding: 8,
     margin: 4,
-    width: 300,
-    height: 100,
   },
   catagoryText: {
-    marginTop: 25,
+    marginTop: 15,
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  checkbox: {
+    alignSelf: 'center',
+  },
+  label: {
+    margin: 8,
+  },
+  resetButton: {
+    marginTop: 10,
   },
 });
 

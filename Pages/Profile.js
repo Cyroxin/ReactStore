@@ -39,41 +39,43 @@ const Profile = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <Card>
-        <Card.Title>
-          <Text h1>{user.username}</Text>
-        </Card.Title>
-        <Card.Image
-          source={{ uri: avatar }}
-          style={styles.image}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-        <ListItem>
-          <Avatar icon={{ name: 'email', color: 'black' }} />
-          <Text>{user.email}</Text>
-        </ListItem>
-        <ListItem>
-          <Avatar
-            icon={{ name: 'user', type: 'font-awesome', color: 'black' }}
+    <>
+      <ScrollView>
+        <Card>
+          <Card.Title>
+            <Text h1>{user.username}</Text>
+          </Card.Title>
+          <Card.Image
+            source={{ uri: avatar }}
+            style={styles.image}
+            PlaceholderContent={<ActivityIndicator />}
           />
-          <Text>{user.full_name}</Text>
-        </ListItem>
-        <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
-          <Avatar icon={{ name: 'perm-media', color: 'black' }} />
-          <ListItem.Content>
-            <ListItem.Title>My Files</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-        <ListItem bottomDivider onPress={logout}>
-          <Avatar icon={{ name: 'logout', color: 'black' }} />
-          <ListItem.Content>
-            <ListItem.Title>Logout</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      </Card>
+          <ListItem>
+            <Avatar icon={{ name: 'email', color: 'black' }} />
+            <Text>{user.email}</Text>
+          </ListItem>
+          <ListItem>
+            <Avatar
+              icon={{ name: 'user', type: 'font-awesome', color: 'black' }}
+            />
+            <Text>{user.full_name}</Text>
+          </ListItem>
+          <ListItem bottomDivider onPress={() => navigation.push('My Files')}>
+            <Avatar icon={{ name: 'perm-media', color: 'black' }} />
+            <ListItem.Content>
+              <ListItem.Title>My Files</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+          <ListItem bottomDivider onPress={logout}>
+            <Avatar icon={{ name: 'logout', color: 'black' }} />
+            <ListItem.Content>
+              <ListItem.Title>Logout</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+        </Card>
+      </ScrollView>
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),
@@ -82,7 +84,7 @@ const Profile = ({ navigation }) => {
           () => navigation.navigate('Home'),
         ]}
       />
-    </ScrollView>
+    </>
   );
 };
 

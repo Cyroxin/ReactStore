@@ -11,15 +11,6 @@ const constraints = {
       message: 'min length is 3 characters',
     },
   },
-  description: {
-    presence: {
-      message: 'cannot be empty',
-    },
-    length: {
-      minimum: 0,
-      message: 'min length is 5 characters',
-    },
-  },
 };
 
 const useUploadForm = (callback) => {

@@ -1,6 +1,7 @@
 import { Button, Container, Fab, Header, Icon } from 'native-base';
 import React, { useEffect } from 'react';
 import { View, ScrollView, Text, Platform, StyleSheet } from 'react-native';
+import PopupInput from './PopupInput';
 
 export const FloatingNavigator = (props) => {
   const children = props.children;
@@ -43,18 +44,6 @@ export const FloatingNavigator = (props) => {
         onPress={hasPress && props.onPress[3]}
       >
         <Icon name={upload ? 'camera' : 'home-sharp'} />
-      </Button>
-      <Button
-        style={upload ? styles.blue : styles.blue}
-        onPress={hasPress && props.onPress[4]}
-      >
-        <Icon name={upload ? 'reload-circle-sharp' : 'reload-sharp'} />
-      </Button>
-      <Button
-        style={upload ? styles.green : styles.blue}
-        onPress={hasPress && props.onPress[5]}
-      >
-        <Icon name={upload ? 'md-trending-up-sharp' : 'reload-sharp'} />
       </Button>
     </Fab>
   );

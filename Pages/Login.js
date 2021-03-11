@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { MainContext } from '../contexts/MainContext';
@@ -16,6 +17,7 @@ import LoginForm from '../Components/LoginForm';
 import RegisterForm from '../Components/RegisterForm';
 import { Card, ListItem } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
+import GlobalStyles from '../utils/GlobalStyle';
 
 const Login = ({ navigation }) => {
   const { isLoggedIn, setIsLoggedIn, setUser } = useContext(MainContext);
@@ -42,58 +44,68 @@ const Login = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={'padding'}
-        enabled
-      >
-        <TouchableWithoutFeedback onPress={Platform.OS == 'web' ? undefined : Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <View style={styles.appName}>
-              <Text h1>Handcrafted Items</Text>
+    <SafeAreaView style={GlobalStyles.droidSafeArea}>
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={'padding'}
+          enabled
+        >
+          <TouchableWithoutFeedback
+            onPress={Platform.OS == 'web' ? undefined : Keyboard.dismiss}
+          >
+            <View style={styles.inner}>
+              <View style={styles.appName}>
+                <Text style={styles.name} h1>
+                  Handcrafted Items
+                </Text>
+              </View>
+              <View style={styles.form}>
+                <Card>
+                  {formToggle ? (
+                    <>
+                      <Card.Title h4>Login</Card.Title>
+                      <Card.Divider />
+                      <LoginForm />
+                    </>
+                  ) : (
+                    <>
+                      <Card.Title h4>Register</Card.Title>
+                      <Card.Divider />
+                      <RegisterForm />
+                    </>
+                  )}
+                  <ListItem
+                    onPress={() => {
+                      setFormToggle(!formToggle);
+                    }}
+                  >
+                    <ListItem.Content>
+                      <Text style={styles.text}>
+                        {formToggle
+                          ? 'No account? Please register.'
+                          : 'Already registered. Login here.'}
+                      </Text>
+                    </ListItem.Content>
+                    <ListItem.Chevron />
+                  </ListItem>
+                </Card>
+              </View>
             </View>
-            <View style={styles.form}>
-              <Card>
-                {formToggle ? (
-                  <>
-                    <Card.Title h4>Login</Card.Title>
-                    <Card.Divider />
-                    <LoginForm/>
-                  </>
-                ) : (
-                  <>
-                    <Card.Title h4>Register</Card.Title>
-                    <Card.Divider />
-                    <RegisterForm/>
-                  </>
-                )}
-                <ListItem
-                  onPress={() => {
-                    setFormToggle(!formToggle);
-                  }}
-                >
-                  <ListItem.Content>
-                    <Text style={styles.text}>
-                      {formToggle
-                        ? 'No account? Please register.'
-                        : 'Already registered. Login here.'}
-                    </Text>
-                  </ListItem.Content>
-                  <ListItem.Chevron />
-                </ListItem>
-              </Card>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  name: {
+    fontSize: 25,
+    fontWeight: 'bold',
   },
   inner: {
     padding: 24,
