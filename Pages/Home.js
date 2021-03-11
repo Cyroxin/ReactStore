@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
   Text,
@@ -21,6 +21,9 @@ import { Pressable } from 'react-native';
 const Home = ({ navigation, route }) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
   const height = useWindowDimensions().height;
+
+  const tag = route.params == undefined ? undefined : route.params.tag;
+  const user_id = route.params == undefined ? undefined : route.params.user_id;
 
   const banner = {
     width: width,
@@ -47,78 +50,49 @@ const Home = ({ navigation, route }) => {
       <PostsList
         ListHeaderComponent={
           <>
-            <Carousel onContentSizeChangeInterval={(w) => setWidth(w)}>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, undefined).then((out) => setPosts(out))
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Handicraft</Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, 'art').then((out) => setPosts(out))
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Art</Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, 'textiles').then((out) => setPosts(out))
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Textiles</Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, 'electronics').then((out) =>
-                    setPosts(out)
-                  )
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Electronics</Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, 'crafts').then((out) => setPosts(out))
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Crafts</Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={(e) =>
-                  getPosts(undefined, 'food and drink').then((out) =>
-                    setPosts(out)
-                  )
-                }
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Food and Drink</Text>
-                </View>
-              </Pressable>
-              <PopupInput
-                onPress={[
-                  () => {},
-                  (text) => {
-                    getPosts(undefined, text).then((out) => setPosts(out));
-                  },
-                ]}
-              >
-                <View style={{ ...banner, backgroundColor: '#d9baba' }}>
-                  <Text style={{ fontSize: 50 }}>Other</Text>
-                </View>
-              </PopupInput>
-            </Carousel>
+            {user_id == undefined ? (
+              <>
+                <Carousel onContentSizeChangeInterval={(w) => setWidth(w)}>
+                  <Pressable onPress={(e) => setTag(undefined)}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Handicraft</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={(e) => setTag('art')}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Art</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={(e) => setTag('textiles')}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Textiles</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={(e) => setTag('electronics')}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Electronics</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={(e) => setTag('crafts')}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Crafts</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={(e) => setTag('food and drink')}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Food and Drink</Text>
+                    </View>
+                  </Pressable>
+                  <PopupInput onPress={[() => {}, (text) => setTag(text)]}>
+                    <View style={{ ...banner, backgroundColor: '#d9baba' }}>
+                      <Text style={{ fontSize: 50 }}>Other</Text>
+                    </View>
+                  </PopupInput>
+                </Carousel>
+              </>
+            ) : (
+              <></>
+            )}
             {/* Sort List */}
             <SortSelector
               onPress={[
@@ -154,8 +128,10 @@ const Home = ({ navigation, route }) => {
         style={{ height: height, margin: 0 }}
       />
       <FloatingNavigator
+        back={user_id != undefined}
         onPress={[
-          () => console.log('disabled by fabnav'),
+          () =>
+            user_id != undefined && posts != undefined && navigation.goBack(),
           () => navigation.navigate('Profile'),
           () => navigation.navigate('Upload'),
           () => console.log('home'),
