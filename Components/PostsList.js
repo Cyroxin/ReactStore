@@ -1,31 +1,12 @@
-import {
-  Body,
-  Button,
-  Icon,
-  Card,
-  CardItem,
-  Left,
-  List,
-  ListItem,
-  Picker,
-  Right,
-  Content,
-} from "native-base";
 import Post from "./Post";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  ScrollView,
-  Text,
-  Platform,
-  Image,
-  FlatList,
-} from "react-native";
-import PropTypes from "prop-types";
+import { FlatList } from "react-native";
 
 /* Accepts either array Items[] or loader function which accepts loader(start,limit) index calls */
-const PostsList = ({ props }) => {
-  //const children = props.children;
+const PostsList = (props) => {
+  console.log("CHECKNAVIGAION", { props });
+  const children = props.children;
+
   //const columns = Platform.OS == "web" ? 3 : 1;
 
   /* Items[] element data:
@@ -57,14 +38,11 @@ const PostsList = ({ props }) => {
       // columnWrapperStyle={
       //   columns != 1 ? { justifyContent: "space-evenly" } : undefined
       // }
-      renderItem={({ item }) => <Post />}
+      renderItem={({ item }) => (
+        <Post item={item} navigation={props.navigation} />
+      )}
     />
   );
-};
-
-PostsList.propTypes = {
-  item: PropTypes.object,
-  navigation: PropTypes.object,
 };
 
 export default PostsList;

@@ -1,11 +1,12 @@
-import { Button, Container, Fab, Header, Icon } from 'native-base';
-import React, { useEffect } from 'react';
-import { View, ScrollView, Text, Platform, StyleSheet } from 'react-native';
+import { Button, Container, Fab, Header, Icon } from "native-base";
+import React, { useEffect, useRef } from "react";
+import { View, ScrollView, Text, Platform, StyleSheet } from "react-native";
 
 export const FloatingNavigator = (props) => {
   const children = props.children;
 
   const upload = props.upload != undefined;
+  const back = props.back != undefined && props.back == true;
   const hasPress = props.onPress != undefined;
 
   const [floatingNavigator, setFloatingNavigator] = React.useState();
@@ -13,36 +14,40 @@ export const FloatingNavigator = (props) => {
 
   return (
     <Fab
+      style={styles.btn}
+      {...props}
       ref={(c) => {
         setFloatingNavigator(c);
       }}
       active={upload ? true : expanded}
-      direction='up'
-      style={props.style != undefined ? props.style : styles.btn}
-      containerStyle={{}}
-      position='bottomRight'
-      onPress={
-        upload ? hasPress && props.onPress[0] : () => setExpanded(!expanded)
-      }
+      direction="up"
+      position="bottomRight"
+      onPress={() => {
+        if (hasPress) props.onPress[0]();
+
+        if (!upload && !back) setExpanded(!expanded);
+      }}
     >
-      <Icon name={upload ? 'checkmark-sharp' : 'menu-sharp'} />
+      <Icon
+        name={back ? "arrow-back" : upload ? "checkmark-sharp" : "menu-sharp"}
+      />
       <Button
         style={upload ? styles.red : styles.blue}
         onPress={hasPress && props.onPress[1]}
       >
-        <Icon name={upload ? 'close-sharp' : 'person-sharp'} />
+        <Icon name={upload ? "close-sharp" : "person-sharp"} />
       </Button>
       <Button
         style={upload ? styles.green : styles.green}
         onPress={hasPress && props.onPress[2]}
       >
-        <Icon name={upload ? 'images-sharp' : 'add'} />
+        <Icon name={upload ? "images-sharp" : "add"} />
       </Button>
       <Button
         style={upload ? styles.blue : styles.blue}
         onPress={hasPress && props.onPress[3]}
       >
-        <Icon name={upload ? 'film' : 'home-sharp'} />
+        <Icon name={upload ? "film" : "home-sharp"} />
       </Button>
     </Fab>
   );
@@ -50,17 +55,17 @@ export const FloatingNavigator = (props) => {
 
 const styles = StyleSheet.create({
   green: {
-    backgroundColor: '#34A34F',
+    backgroundColor: "#34A34F",
   },
   red: {
-    backgroundColor: '#DD5144',
-    color: 'white',
+    backgroundColor: "#DD5144",
+    color: "white",
   },
   blue: {
-    backgroundColor: '#3B5998',
+    backgroundColor: "#3B5998",
   },
   btn: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
     zIndex: 999,

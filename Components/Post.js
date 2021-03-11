@@ -14,13 +14,25 @@ import {
   Content,
   Text,
 } from "native-base";
-import PropTypes from "prop-types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { toReadableTime } from "../utils/relativetime";
+import PropTypes from "prop-types";
+import { useNavigation } from "@react-navigation/native";
 
-const Post = ({ navigation }) => {
+export const Post = ({ item }) => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("Single")}>
+    <TouchableOpacity
+      onPress={() => {
+        /* 1. Navigate to the Details route with params */
+        navigation.navigate("Single", {
+          itemUrl: item.url,
+          userId: item.user_id,
+          description: item.description,
+        });
+      }}
+    >
       <Card
         pointerEvents="none"
         //style={{ width: `${99 / columns}%` }}
@@ -59,8 +71,8 @@ const Post = ({ navigation }) => {
 };
 
 Post.propTypes = {
+  navigation: PropTypes.object.isRequired,
   item: PropTypes.object,
-  navigation: PropTypes.object,
 };
 
 export default Post;
