@@ -244,8 +244,6 @@ const Upload = (props) => {
             () => props.navigation.goBack(),
             () => pickImage(true),
             () => pickImage(false),
-            () => doReset(),
-            () => console.log('tags'),
           ]}
         />
       </View>
