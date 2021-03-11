@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea}>
-      <ScrollView>
+      <ScrollView style={styles.main}>
         <KeyboardAvoidingView
           style={styles.container}
           behavior={'padding'}
@@ -102,6 +102,9 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  main: {
+    backgroundColor: 'lightblue',
   },
   name: {
     fontSize: 25,

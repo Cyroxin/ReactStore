@@ -211,7 +211,7 @@ const Upload = (props) => {
               style={{ height: 50, width: 150 }}
               onValueChange={(itemValue, itemIndex) => setTagInput(itemValue)}
             >
-              <Picker.Item label='Select' value='' />
+              <Picker.Item label='Select Category' value='' />
               <Picker.Item label='Art' value='art' />
               <Picker.Item label='Textiles' value='textiles' />
               <Picker.Item label='Electronics' value='electronics' />
@@ -228,7 +228,7 @@ const Upload = (props) => {
               borderColor: 'black',
               padding: 8,
             }}
-            placeholder='Other Catagory'
+            placeholder='Other Category'
             onChangeText={(text) => onChangeText(text)}
             value={value}
           />
