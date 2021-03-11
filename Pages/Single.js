@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Post from "../Components/Post";
 
 import FloatingNavigator from "../Components/FloatingNavigator";
 import { ActivityIndicator } from "react-native";
