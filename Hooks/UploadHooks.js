@@ -1,31 +1,31 @@
-import { useState } from 'react';
-import { validator } from '../utils/validator';
+import { useState } from "react";
+import { validator } from "../utils/validator";
 
 const constraints = {
   title: {
     presence: {
-      message: 'cannot be empty',
+      message: "cannot be empty",
     },
     length: {
       minimum: 3,
-      message: 'min length is 3 characters',
+      message: "min length is 3 characters",
     },
   },
   description: {
     presence: {
-      message: 'cannot be empty',
+      message: "cannot be empty",
     },
     length: {
-      minimum: 8,
-      message: 'min length is 5 characters',
+      minimum: 5,
+      message: "min length is 5 characters",
     },
   },
 };
 
 const useUploadForm = (callback) => {
   const [inputs, setInputs] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
   });
   const [uploadErrors, setUploadErrors] = useState({});
 
@@ -47,8 +47,8 @@ const useUploadForm = (callback) => {
 
   const reset = () => {
     setInputs({
-      title: '',
-      description: '',
+      title: "",
+      description: "",
     });
     setUploadErrors({});
   };

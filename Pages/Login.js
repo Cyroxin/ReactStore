@@ -29,8 +29,10 @@ const Login = ({ navigation }) => {
     if (userToken) {
       try {
         const userData = await checkToken(userToken);
+
         setUser(userData);
         setIsLoggedIn(true);
+        await AsyncStorage.setItem("userId", userData.user_id.toString());
         navigation.navigate("Home");
       } catch (error) {
         console.log("token check failed", error.message);

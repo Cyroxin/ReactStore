@@ -135,6 +135,7 @@ const Home = ({ navigation, route }) => {
         }
         items={posts}
         style={{ height: height, margin: 0 }}
+        navigation={navigation}
       />
       <FloatingNavigator
         back={user_id != undefined}

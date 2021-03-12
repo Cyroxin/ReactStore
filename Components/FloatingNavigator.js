@@ -1,10 +1,13 @@
+import { setStatusBarHidden } from "expo-status-bar";
 import { Button, Container, Fab, Header, Icon } from "native-base";
 import React, { useEffect, useRef } from "react";
 import { View, ScrollView, Text, Platform, StyleSheet } from "react-native";
+import PopupInput from "./PopupInput";
 
 export const FloatingNavigator = (props) => {
   const children = props.children;
 
+  const owner = props.owner;
   const upload = props.upload != undefined;
   const back = props.back != undefined && props.back == true;
   const hasPress = props.onPress != undefined;
@@ -19,7 +22,7 @@ export const FloatingNavigator = (props) => {
       ref={(c) => {
         setFloatingNavigator(c);
       }}
-      active={upload ? true : expanded}
+      active={upload || owner ? true : expanded}
       direction="up"
       position="bottomRight"
       onPress={() => {
@@ -32,22 +35,23 @@ export const FloatingNavigator = (props) => {
         name={back ? "arrow-back" : upload ? "checkmark-sharp" : "menu-sharp"}
       />
       <Button
-        style={upload ? styles.red : styles.blue}
+        style={upload || owner ? styles.red : styles.blue}
         onPress={hasPress && props.onPress[1]}
       >
-        <Icon name={upload ? "close-sharp" : "person-sharp"} />
+        <Icon name={upload || owner ? "close-sharp" : "person-sharp"} />
       </Button>
       <Button
         style={upload ? styles.green : styles.green}
         onPress={hasPress && props.onPress[2]}
       >
-        <Icon name={upload ? "images-sharp" : "add"} />
+        <Icon name={upload ? "images-sharp" : owner ? "pencil" : "add"} />
       </Button>
+
       <Button
-        style={upload ? styles.blue : styles.blue}
+        style={upload ? styles.blue : owner ? styles.hide : styles.blue}
         onPress={hasPress && props.onPress[3]}
       >
-        <Icon name={upload ? "film" : "home-sharp"} />
+        <Icon name={upload ? "camera" : owner ? null : "home-sharp"} />
       </Button>
     </Fab>
   );
@@ -69,6 +73,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     zIndex: 999,
+  },
+  hide: {
+    display: "none",
   },
 });
 

@@ -47,17 +47,14 @@ export const PostsList = (props) => {
         columns != 1 ? { justifyContent: "space-evenly" } : undefined
       }
       renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() => {
-            /* 1. Navigate to the Details route with params */
-            navigation.navigate("Single", {
-              itemUrl: item.url,
-              userId: item.user_id,
-              description: item.description,
-            });
-          }}
-        >
-          <Card style={{ width: `${99 / columns}%` }}>
+        <Card style={{ width: `${99 / columns}%` }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Single", {
+                item: { item },
+              });
+            }}
+          >
             <Image
               source={{
                 uri: item.thumbnail[1],
@@ -69,26 +66,26 @@ export const PostsList = (props) => {
                 aspectRatio: 800 / 400,
               }}
             />
-            <CardItem>
-              <Left>
-                <Button transparent>
-                  <>
-                    <Icon active name="thumbs-up" />
-                    <Text>{item.likes.length} Likes</Text>
-                  </>
-                </Button>
-              </Left>
-              <Body>
-                <Text style={{ alignSelf: "center" }}>{item.title}</Text>
-              </Body>
-              <Right>
-                <Text>
-                  Uploaded {toReadableTime(Date.parse(item.time_added))}
-                </Text>
-              </Right>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <CardItem>
+            <Left>
+              <Button transparent>
+                <>
+                  <Icon active name="thumbs-up" />
+                  <Text>{item.likes.length} Likes</Text>
+                </>
+              </Button>
+            </Left>
+            <Body>
+              <Text style={{ alignSelf: "center" }}>{item.title}</Text>
+            </Body>
+            <Right>
+              <Text>
+                Uploaded {toReadableTime(Date.parse(item.time_added))}
+              </Text>
+            </Right>
+          </CardItem>
+        </Card>
       )}
     />
   );
