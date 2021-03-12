@@ -32,7 +32,13 @@ export const FloatingNavigator = (props) => {
       }}
     >
       <Icon
-        name={back ? "arrow-back" : upload ? "checkmark-sharp" : "menu-sharp"}
+        name={
+          back || owner
+            ? "arrow-back"
+            : upload
+            ? "checkmark-sharp"
+            : "menu-sharp"
+        }
       />
       <Button
         style={upload || owner ? styles.red : styles.blue}

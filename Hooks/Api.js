@@ -184,7 +184,7 @@ const updateMedia = async (
         "x-access-token": token,
       },
       data: data,
-      url: url + `/media/${mediaId}`,
+      url: apiurl + `/media/${mediaId}`,
     };
 
     try {
