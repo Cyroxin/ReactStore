@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgb(204, 252, 236)",
   },
   kav: {
     flex: 1,
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 8,
-    margin: 4,
+    height: 200,
   },
   catagoryText: {
     marginTop: 15,

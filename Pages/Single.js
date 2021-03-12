@@ -27,7 +27,7 @@ const Single = (props) => {
     try {
       const userId = await AsyncStorage.getItem("userId");
       const postUserId = item.user_id.toString();
-      return Boolean(userId == postUserId);
+      return userId == postUserId;
     } catch (e) {
       console.log(e);
     }
