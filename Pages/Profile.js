@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Card, Text, ListItem, Avatar } from "react-native-elements";
 import { useTag } from "../Hooks/Api";
-import { ScrollView } from "react-native-gesture-handler";
 import FloatingNavigator from "../Components/FloatingNavigator";
+import { ScrollView } from 'react-native';
 
 const uploadUrl = "https://media-new.mw.metropolia.fi/wbma/uploads/";
 
