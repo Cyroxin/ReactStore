@@ -7,8 +7,8 @@ import {
   Platform,
   Image,
   FlatList,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+  TouchableOpacity,
+} from 'react-native';
 import { toReadableTime } from "../utils/relativetime";
 
 /* Accepts either array Items[] or loader function which accepts loader(start,limit) index calls */

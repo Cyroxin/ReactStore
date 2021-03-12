@@ -188,21 +188,21 @@ const Upload = (props) => {
           {image && (
             <Image
               source={{ uri: image }}
-              style={{ width: "100%", height: "30%", aspectRatio: 1 }}
+              style={{ width: '100%', height: '30%', aspectRatio: 1 }}
             />
           )}
-          <Input
+          <InputC
             style={styles.titleInput}
-            placeholder="title"
+            placeholder='title'
             value={inputs.title}
-            onChangeText={(txt) => handleInputChange("title", txt)}
+            onChangeText={(txt) => handleInputChange('title', txt)}
             errorMessage={uploadErrors.title}
           />
           <Input
             style={styles.descriptionInput}
-            placeholder="description"
+            placeholder='description'
             value={inputs.description}
-            onChangeText={(txt) => handleInputChange("description", txt)}
+            onChangeText={(txt) => handleInputChange('description', txt)}
             errorMessage={uploadErrors.description}
           />
           <View style={styles.picker}>
@@ -211,31 +211,31 @@ const Upload = (props) => {
               style={{ height: 50, width: 150 }}
               onValueChange={(itemValue, itemIndex) => setTagInput(itemValue)}
             >
-              <Picker.Item label="Select Category" value="" />
-              <Picker.Item label="Art" value="art" />
-              <Picker.Item label="Textiles" value="textiles" />
-              <Picker.Item label="Electronics" value="electronics" />
-              <Picker.Item label="Crafts" value="crafts" />
-              <Picker.Item label="Food and Drink" value="food and drink" />
+              <Picker.Item label='Select Category' value='' />
+              <Picker.Item label='Art' value='art' />
+              <Picker.Item label='Textiles' value='textiles' />
+              <Picker.Item label='Electronics' value='electronics' />
+              <Picker.Item label='Crafts' value='crafts' />
+              <Picker.Item label='Food and Drink' value='food and drink' />
             </Picker>
           </View>
           <Input
             style={{
               marginTop: 0,
               marginBottom: 10,
-              borderColor: "gray",
+              borderColor: 'gray',
               borderWidth: 1,
-              borderColor: "black",
+              borderColor: 'black',
               padding: 8,
             }}
-            placeholder="Other Category"
+            placeholder='Other Category'
             onChangeText={(text) => onChangeText(text)}
             value={value}
           />
 
-          {isUploading && <ActivityIndicator size="large" color="#0000ff" />}
+          {isUploading && <ActivityIndicator size='large' color='#0000ff' />}
 
-          <Button style={styles.resetButton} title="Reset" onPress={doReset} />
+          <Button style={styles.resetButton} title='Reset' onPress={doReset} />
         </ScrollView>
         <FloatingNavigator
           upload

@@ -17,6 +17,7 @@ import { getPosts, useLike } from "../Hooks/Api";
 import { timeSince } from "../utils/relativetime";
 import PopupInput from "../Components/PopupInput";
 import { Pressable } from "react-native";
+import { Platform } from 'react-native';
 
 const Home = ({ navigation, route }) => {
   const [width, setWidth] = useState(useWindowDimensions().width);
@@ -35,6 +36,7 @@ const Home = ({ navigation, route }) => {
 
   const [posts, setPosts] = useState();
   useEffect(() => {
+    if(Platform.OS != "web") {
     const unsubscribe = navigation.addListener('focus', () => {
       getPosts(user_id, tag).then((out) => {
         out.sort(
@@ -48,6 +50,16 @@ const Home = ({ navigation, route }) => {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
+  }
+  else {
+    getPosts(user_id, tag).then((out) => {
+      out.sort(
+        (a, b) =>
+          timeSince(new Date(a.time_added)) > timeSince(new Date(b.time_added))
+      );
+      setPosts(out);
+    });
+  }
   }, []);
 
   const setTag = (tag) => {
