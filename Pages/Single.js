@@ -16,11 +16,10 @@ import {
   Right,
   Input,
 } from "native-base";
-import { deleteMedia, getPosts, useLike } from "../Hooks/Api";
+import { deleteMedia, useLike } from "../Hooks/Api";
 
 const Single = (props) => {
   const { item } = props.route.params.item;
-  const { postLikes } = useLike();
 
   const checkOwner = async () => {
     try {
@@ -35,7 +34,7 @@ const Single = (props) => {
   const editText = (editmode) => {
     let myelement = undefined;
     if (editmode) {
-      myelement = <Input>{item.description}</Input>;
+      myelement = <Input placeholder='description'>{item.description}</Input>;
     } else {
       myelement = <Text>{item.description}</Text>;
     }
@@ -46,7 +45,7 @@ const Single = (props) => {
     <>
       <ScrollView style={styles.card}>
         <Card>
-          <Input> {item.title} </Input>
+          <Input placeholder='Title'> {item.title} </Input>
           <Image
             source={{
               uri: item.url,
@@ -69,7 +68,8 @@ const Single = (props) => {
                     onPress={async () => {
                       const token = AsyncStorage.getItem('userToken');
                       console.log('usedlike');
-                      postLikes(item.file_id, token);
+                      const likes = useLike();
+                      await likes.postLikes(item.file_id, token).then(() => item.likes.push([]));
                     }}
                   />
                   <Text>{item.likes.length} Likes</Text>

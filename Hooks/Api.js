@@ -98,6 +98,19 @@ const useTag = () => {
       throw new Error("postTag error: " + error.message);
     }
   };
+  const postLikes = async (file_id, token) => {
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-access-token': token },
+      body: JSON.stringify(file_id),
+    };
+    try {
+      const result = await doFetch(apiurl + '/favourites', options);
+      return result;
+    } catch (error) {
+      throw new Error('postTag error: ' + error.message);
+    }
+  };
   return { getFilesByTag, postTag };
 };
 
@@ -110,6 +123,8 @@ const useLike = () => {
       throw new Error(error.message);
     }
   };
+
+  
 
   const postLikes = async (file_id, token) => {
     const options = {
