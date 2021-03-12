@@ -14,10 +14,9 @@ import {
   Icon,
   Body,
   Right,
+  Input,
 } from "native-base";
 import { deleteMedia, getPosts, useLike } from "../Hooks/Api";
-import GlobalStyle from "../utils/GlobalStyle";
-import { TextInput } from "react-native-gesture-handler";
 
 const Single = (props) => {
   const { item } = props.route.params.item;
@@ -36,7 +35,7 @@ const Single = (props) => {
   const editText = (editmode) => {
     let myelement = undefined;
     if (editmode) {
-      myelement = <TextInput>{item.description}</TextInput>;
+      myelement = <Input>{item.description}</Input>;
     } else {
       myelement = <Text>{item.description}</Text>;
     }
@@ -47,15 +46,15 @@ const Single = (props) => {
     <>
       <ScrollView style={styles.card}>
         <Card>
-          <TextInput> {item.title} </TextInput>
+          <Input> {item.title} </Input>
           <Image
             source={{
               uri: item.url,
             }}
             style={{
-              width: "100%",
+              width: '100%',
               height: 200,
-              resizeMode: "cover",
+              resizeMode: 'cover',
               aspectRatio: 800 / 400,
             }}
           />
@@ -66,10 +65,10 @@ const Single = (props) => {
                 <>
                   <Icon
                     active
-                    name="thumbs-up"
+                    name='thumbs-up'
                     onPress={async () => {
-                      const token = AsyncStorage.getItem("userToken");
-                      console.log("usedlike");
+                      const token = AsyncStorage.getItem('userToken');
+                      console.log('usedlike');
                       postLikes(item.file_id, token);
                     }}
                   />
@@ -95,23 +94,23 @@ const Single = (props) => {
           () => props.navigation.goBack(),
 
           async () => {
-            console.log("DELETE POST", item);
-            const userToken = await AsyncStorage.getItem("userToken");
+            console.log('DELETE POST', item);
+            const userToken = await AsyncStorage.getItem('userToken');
 
             Alert.alert(
-              "DELETE POST",
-              "Are you sure?",
+              'DELETE POST',
+              'Are you sure?',
               [
                 {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
                 },
                 {
-                  text: "Yes",
+                  text: 'Yes',
                   onPress: () => {
                     deleteMedia(userToken, item.file_id);
-                    props.navigation.navigate("Home");
+                    props.navigation.navigate('Home');
                   },
                 },
               ],
