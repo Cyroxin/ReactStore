@@ -110,7 +110,7 @@ const Single = (props) => {
                   text: 'Yes',
                   onPress: () => {
                     deleteMedia(userToken, item.file_id);
-                    props.navigation.navigate('Home');
+                    props.navigation.goBack();
                   },
                 },
               ],
