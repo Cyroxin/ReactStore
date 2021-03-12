@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "pink",
     alignContent: "center",
     marginTop: 20,
   },

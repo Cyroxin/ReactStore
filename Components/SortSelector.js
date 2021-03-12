@@ -11,7 +11,7 @@ export const SortSelector = (props) => {
   return (
     <Picker
       mode='dropdown'
-      style={{ width: 150 }}
+      style={{ width: 150, margin: 30 }}
       selectedValue={selected}
       onValueChange={(value,index) => {
         setSelected(value); 
