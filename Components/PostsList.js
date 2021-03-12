@@ -1,12 +1,21 @@
-import { Body, Button, Icon, Card, CardItem, Left, List, ListItem, Picker, Right, Content } from 'native-base';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, ScrollView, Text, Platform, Image, FlatList } from 'react-native';
-import { toReadableTime } from '../utils/relativetime';
+import { Body, Button, Icon, Card, CardItem, Left, Right } from "native-base";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  ScrollView,
+  Text,
+  Platform,
+  Image,
+  FlatList,
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { toReadableTime } from "../utils/relativetime";
 
 /* Accepts either array Items[] or loader function which accepts loader(start,limit) index calls */
 export const PostsList = (props) => {
   const children = props.children;
-  const columns = Platform.OS == 'web' ? 3 : 1;
+  const navigation = props.navigation;
+  const columns = Platform.OS == "web" ? 3 : 1;
 
   /* Items[] element data:
     url       String  Link to the post image
@@ -35,32 +44,40 @@ export const PostsList = (props) => {
       keyExtractor={(_, index) => index.toString()}
       numColumns={columns}
       columnWrapperStyle={
-        columns != 1 ? { justifyContent: 'space-evenly' } : undefined
+        columns != 1 ? { justifyContent: "space-evenly" } : undefined
       }
       renderItem={({ item }) => (
         <Card style={{ width: `${99 / columns}%` }}>
-          <Image
-            source={{
-              uri: item.thumbnail[1],
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Single", {
+                item: { item },
+              });
             }}
-            style={{
-              width: '100%',
-              height: 200,
-              resizeMode: 'cover',
-              aspectRatio: 800 / 400,
-            }}
-          />
+          >
+            <Image
+              source={{
+                uri: item.thumbnail[1],
+              }}
+              style={{
+                width: "100%",
+                height: 200,
+                resizeMode: "cover",
+                aspectRatio: 800 / 400,
+              }}
+            />
+          </TouchableOpacity>
           <CardItem>
             <Left>
               <Button transparent>
                 <>
-                  <Icon active name='thumbs-up' />
+                  <Icon active name="thumbs-up" />
                   <Text>{item.likes.length} Likes</Text>
                 </>
               </Button>
             </Left>
             <Body>
-              <Text style={{ alignSelf: 'center' }}>{item.title}</Text>
+              <Text style={{ alignSelf: "center" }}>{item.title}</Text>
             </Body>
             <Right>
               <Text>

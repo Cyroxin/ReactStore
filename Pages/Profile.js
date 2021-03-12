@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, ActivityIndicator } from 'react-native';
-import { MainContext } from '../contexts/MainContext';
-import PropTypes from 'prop-types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card, Text, ListItem, Avatar } from 'react-native-elements';
-import { useTag } from '../Hooks/Api';
-import { ScrollView } from 'react-native-gesture-handler';
-import FloatingNavigator from '../Components/FloatingNavigator';
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import { MainContext } from "../contexts/MainContext";
+import PropTypes from "prop-types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Card, Text, ListItem, Avatar } from "react-native-elements";
+import { useTag } from "../Hooks/Api";
+import { ScrollView } from "react-native-gesture-handler";
+import FloatingNavigator from "../Components/FloatingNavigator";
 
-const uploadUrl = 'https://media-new.mw.metropolia.fi/wbma/uploads/';
+const uploadUrl = "https://media-new.mw.metropolia.fi/wbma/uploads/";
 
 const Profile = ({ navigation }) => {
   const { isLoggedIn, setIsLoggedIn, user } = useContext(MainContext);
-  const [avatar, setAvatar] = useState('http://placekitten.com/200/300');
+  const [avatar, setAvatar] = useState("http://placekitten.com/200/300");
   const { getFilesByTag } = useTag();
 
   const logout = async () => {
@@ -20,14 +20,14 @@ const Profile = ({ navigation }) => {
     await AsyncStorage.clear();
     if (!isLoggedIn) {
       // this is to make sure isLoggedIn has changed, will be removed later
-      navigation.navigate('Login');
+      navigation.navigate("Login");
     }
   };
 
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        const avatarList = await getFilesByTag('avatar_' + user.user_id);
+        const avatarList = await getFilesByTag("avatar_" + user.user_id);
         if (avatarList.length > 0) {
           setAvatar(uploadUrl + avatarList.pop().filename);
         }
@@ -59,7 +59,10 @@ const Profile = ({ navigation }) => {
           />
           <Text>{user.full_name}</Text>
         </ListItem>
-        <ListItem bottomDivider onPress={() => navigation.push('Home',{user_id: user.user_id})}>
+        <ListItem
+          bottomDivider
+          onPress={() => navigation.push('Home', { user_id: user.user_id })}
+        >
           <Avatar icon={{ name: 'perm-media', color: 'black' }} />
           <ListItem.Content>
             <ListItem.Title>My Files</ListItem.Title>
@@ -77,9 +80,9 @@ const Profile = ({ navigation }) => {
       <FloatingNavigator
         onPress={[
           () => console.log('disabled by fabnav'),
+          () => navigation.navigate('Home'),
           () => navigation.navigate('Profile'),
           () => navigation.navigate('Upload'),
-          () => navigation.navigate('Home'),
         ]}
       />
     </ScrollView>
@@ -91,7 +94,7 @@ Profile.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  image: { width: '100%', height: undefined, aspectRatio: 1 },
+  image: { width: "100%", height: undefined, aspectRatio: 1 },
 });
 
 export default Profile;

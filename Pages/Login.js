@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,33 +7,35 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import { MainContext } from '../contexts/MainContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUser } from '../Hooks/Api';
-import LoginForm from '../Components/LoginForm';
-import RegisterForm from '../Components/RegisterForm';
-import { Card, ListItem } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
+} from "react-native";
+import PropTypes from "prop-types";
+import { MainContext } from "../contexts/MainContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUser } from "../Hooks/Api";
+import LoginForm from "../Components/LoginForm";
+import RegisterForm from "../Components/RegisterForm";
+import { Card, ListItem } from "react-native-elements";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Login = ({ navigation }) => {
   const { isLoggedIn, setIsLoggedIn, setUser } = useContext(MainContext);
   const [formToggle, setFormToggle] = useState(true);
-  console.log('isLoggedIn?', isLoggedIn);
+  console.log("isLoggedIn?", isLoggedIn);
   const { checkToken } = useUser();
 
   const getToken = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    console.log('token', userToken);
+    const userToken = await AsyncStorage.getItem("userToken");
+    console.log("token", userToken);
     if (userToken) {
       try {
         const userData = await checkToken(userToken);
+
         setUser(userData);
         setIsLoggedIn(true);
-        navigation.navigate('Home');
+        await AsyncStorage.setItem("userId", userData.user_id.toString());
+        navigation.navigate("Home");
       } catch (error) {
-        console.log('token check failed', error.message);
+        console.log("token check failed", error.message);
       }
     }
   };
@@ -45,10 +47,12 @@ const Login = ({ navigation }) => {
     <ScrollView>
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={'padding'}
+        behavior={"padding"}
         enabled
       >
-        <TouchableWithoutFeedback onPress={Platform.OS == 'web' ? undefined : Keyboard.dismiss}>
+        <TouchableWithoutFeedback
+          onPress={Platform.OS == "web" ? undefined : Keyboard.dismiss}
+        >
           <View style={styles.inner}>
             <View style={styles.appName}>
               <Text h1>Handcrafted Items</Text>
@@ -59,13 +63,13 @@ const Login = ({ navigation }) => {
                   <>
                     <Card.Title h4>Login</Card.Title>
                     <Card.Divider />
-                    <LoginForm/>
+                    <LoginForm />
                   </>
                 ) : (
                   <>
                     <Card.Title h4>Register</Card.Title>
                     <Card.Divider />
-                    <RegisterForm/>
+                    <RegisterForm />
                   </>
                 )}
                 <ListItem
@@ -76,8 +80,8 @@ const Login = ({ navigation }) => {
                   <ListItem.Content>
                     <Text style={styles.text}>
                       {formToggle
-                        ? 'No account? Please register.'
-                        : 'Already registered. Login here.'}
+                        ? "No account? Please register."
+                        : "Already registered. Login here."}
                     </Text>
                   </ListItem.Content>
                   <ListItem.Chevron />
@@ -98,18 +102,18 @@ const styles = StyleSheet.create({
   inner: {
     padding: 24,
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
   },
   form: {
     flex: 2,
   },
   appName: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
-    alignSelf: 'center',
+    alignSelf: "center",
     padding: 20,
   },
 });

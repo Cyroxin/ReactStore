@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { View, ScrollView, Text, Image, Platform } from 'react-native';
+import React, { useEffect } from "react";
+import { View, ScrollView, Text, Image, Platform } from "react-native";
 
 export const Carousel = (props) => {
-  const children = props.children; 
+  const children = props.children;
 
   const itemsPerInterval =
     props.itemsPerInterval === undefined ? 1 : props.itemsPerInterval;
@@ -21,7 +21,6 @@ export const Carousel = (props) => {
   };
 
   const getInterval = (offset) => {
-    
     for (let i = 1; i <= intervals; i++) {
       if (offset + 1 < (width / intervals) * i) {
         return i;
@@ -42,7 +41,7 @@ export const Carousel = (props) => {
     bullets.push(
       <Text
         key={i}
-        onPress= {(e) => {
+        onPress={(e) => {
           scroll.scrollTo({ x: getOffset(i), animated: true });
         }}
         style={{
@@ -57,19 +56,25 @@ export const Carousel = (props) => {
   }
 
   return (
-    <View style={{display: 'flex', flexDirection: 'column'}}>
+    <View style={{ display: "flex", flexDirection: "column" }}>
       <ScrollView
         horizontal={true}
         ref={(scroller) => {
           setScroll(scroller);
         }}
         contentContainerStyle={{
-          width: `${100*intervals}%`,
-          justifyContent: 'center',
+          width: `${100 * intervals}%`,
+          justifyContent: "center",
         }}
         //style={props.style}
         showsHorizontalScrollIndicator={false}
-        onContentSizeChange={(w, h) => {init(w); props.onContentSizeChangeInterval(w/intervals/itemsPerInterval,h);}}
+        onContentSizeChange={(w, h) => {
+          init(w);
+          props.onContentSizeChangeInterval(
+            w / intervals / itemsPerInterval,
+            h
+          );
+        }}
         onScroll={(data) => {
           // Set the width to match the slide, not needed if slide sizes do not change/differ.
           setWidth(data.nativeEvent.contentSize.width);
@@ -78,13 +83,19 @@ export const Carousel = (props) => {
         }}
         scrollEventThrottle={1} // Do not show bullet opacity change done by animation
         pagingEnabled
-        decelerationRate='normal'
+        decelerationRate="normal"
         disableIntervalMomentum={true} // Max slide change is (+/-)1
         snapToInterval={width / intervals}
       >
         {children}
       </ScrollView>
-      <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'} }>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
         {bullets}
       </View>
     </View>
