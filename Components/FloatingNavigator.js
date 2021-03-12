@@ -55,12 +55,14 @@ export const FloatingNavigator = (props) => {
         />
       </Button>
 
+{!owner && (
       <Button
         style={upload ? styles.blue : owner ? styles.hide : styles.green}
         onPress={hasPress && props.onPress[3]}
       >
         <Icon name={upload ? 'camera' : owner ? null : 'add'} />
       </Button>
+    )}
     </Fab>
   );
 };
