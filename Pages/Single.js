@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FloatingNavigator from "../Components/FloatingNavigator";
 import { Image } from "react-native";
@@ -16,12 +16,14 @@ import {
   Right,
   Input,
 } from "native-base";
-import { deleteMedia, useLike } from "../Hooks/Api";
+import { deleteMedia, useLike, useTag } from "../Hooks/Api";
 
 const Single = (props) => {
   const { item } = (props != undefined && props.route != undefined && props.route.params != undefined) ?
    props.route.params.item : {};
   const likes = useLike();
+
+  const [likeCount, setLikeCount] = useState(item.likes.length);
 
   const checkOwner = async () => {
     try {
@@ -68,13 +70,32 @@ const Single = (props) => {
                     active
                     name='thumbs-up'
                     onPress={async () => {
-                      const token = AsyncStorage.getItem('userToken');
+                      const userId = await AsyncStorage.getItem("userId");
+                      const token = await AsyncStorage.getItem('userToken');
                       console.log('usedlike');
-                      await likes.postLikes(item.file_id, token).then(() => item.likes.push([]));
 
+                      let found = false;
+
+                      item.likes = await likes.getLikesByFile(item.file_id);
+
+                      for (let i = 0; i < item.likes.length; i++) {
+                        const e = item.likes[i];
+
+                        if (e.user_id == userId) {
+                          await likes.deleteLikes(
+                            item.file_id,
+                            token
+                          ).then(out => setLikeCount(likeCount-1));
+                          found = true;
+                        }
+                      }
+
+                      if(!found)
+                        await likes.postLikes({file_id: item.file_id}, token).then(out => setLikeCount(likeCount+1));
+                    
                     }}
                   />
-                  <Text>{item.likes.length} Likes</Text>
+                  <Text>{likeCount} Likes</Text>
                 </>
               </Button>
             </Left>
